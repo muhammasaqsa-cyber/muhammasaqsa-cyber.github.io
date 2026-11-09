@@ -1,0 +1,1217 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>Juara Kelas</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Juara Kelas: belajar seru untuk anak 8–12 tahun. Materi lengkap dan latihan soal Matematika, Bahasa Inggris, Sains, dan Pengetahuan Indonesia." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@500;700;800&display=swap" rel="stylesheet" />
+<style>
+  /* Layout: satu kolom seperti aplikasi HP; tiap mapel punya warna sendiri, bintang kuning sebagai hadiah.
+     Alur belajar: pilih topik → kartu materi + peraga interaktif → latihan soal. */
+  :root{
+    --bg:#eef6fb; --card:#ffffff; --ink:#1d2b3a; --soft:#5f7186; --line:#d9e6ef;
+    --brand:#0f8f86; --brand-2:#0b6f68; --star:#ffbe2e; --tipbg:#fff5d9;
+    --math:#ff6a4d; --eng:#3d7bf0; --sains:#1fa463; --indo:#d9434b;
+    --ok:#1fa463; --bad:#e5484d;
+    --display:'Fredoka','Trebuchet MS',system-ui,sans-serif;
+    --body:'Nunito',system-ui,-apple-system,'Segoe UI',sans-serif;
+    --ease:cubic-bezier(.2,.8,.2,1);
+    color-scheme:light;
+  }
+  *{box-sizing:border-box}
+  [hidden]{display:none!important}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.5;overflow-x:hidden;
+    padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+  button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;-webkit-tap-highlight-color:transparent}
+  input{font:inherit}
+  h1,h2,h3{font-family:var(--display);margin:0;line-height:1.15;text-wrap:balance}
+  p{margin:0}
+  a{color:inherit}
+  :focus-visible{outline:3px solid var(--brand);outline-offset:2px;border-radius:10px}
+  .app{max-width:560px;margin:0 auto;padding-block:16px 40px}
+  .screen{display:flex;flex-direction:column;gap:16px;animation:pop .35s var(--ease)}
+  @keyframes pop{from{transform:translateY(10px)}to{transform:none}}
+  .card{background:var(--card);border-radius:22px;padding:20px;box-shadow:0 2px 0 var(--line)}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;white-space:nowrap;padding:14px 20px;border-radius:16px;font-family:var(--display);font-weight:600;font-size:1.05rem;transition:transform .15s var(--ease),filter .2s}
+  .btn:active{transform:translateY(2px)}
+  .btn:disabled{opacity:.4;cursor:default}
+  .btn-main{background:var(--brand);color:#fff;box-shadow:0 4px 0 var(--brand-2)}
+  .btn-main:active{box-shadow:0 2px 0 var(--brand-2)}
+  .btn-ghost{background:var(--card);border:2px solid var(--line)}
+  .btn-star{background:var(--star);color:#3a2a00;box-shadow:0 4px 0 #d99a12}
+  .btn-sm{padding:10px 14px;font-size:.95rem;border-radius:12px}
+  .full{width:100%}
+  .muted{color:var(--soft)}
+  .small{font-size:.88rem}
+
+  /* GATE */
+  .logo{display:flex;align-items:center;gap:10px;font-family:var(--display);font-weight:700;font-size:1.5rem}
+  .logo-badge{width:44px;height:44px;border-radius:14px;background:var(--star);display:grid;place-items:center;font-size:1.5rem;box-shadow:0 3px 0 #d99a12}
+  .hero-card{background:var(--brand);color:#fff;border-radius:26px;padding:26px 22px;position:relative;overflow:hidden}
+  .hero-card h1{font-size:clamp(1.9rem,7vw,2.5rem);margin-block:10px 8px}
+  .hero-card p{opacity:.92}
+  .hero-card .deco{position:absolute;right:-10px;bottom:-14px;font-size:6rem;opacity:.25;transform:rotate(-12deg)}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+  .chips span{background:rgba(255,255,255,.18);padding:5px 12px;border-radius:999px;font-weight:700;font-size:.85rem}
+  label.lbl{font-weight:800;font-size:.9rem;display:block;margin-bottom:6px}
+  .field{width:100%;padding:14px 16px;border-radius:14px;border:2px solid var(--line);background:#f8fbfd;font-weight:700;font-size:1.05rem;letter-spacing:.06em;text-transform:uppercase;color:var(--ink)}
+  .field:focus{outline:none;border-color:var(--brand)}
+  .field.name{text-transform:none;letter-spacing:0}
+  .err{color:var(--bad);font-weight:700;font-size:.9rem;min-height:1.3em;margin-top:6px}
+  .or{display:flex;align-items:center;gap:10px;color:var(--soft);font-size:.85rem;font-weight:700}
+  .or::before,.or::after{content:"";flex:1;height:2px;background:var(--line)}
+  .buy-link{text-align:center;font-weight:700;font-size:.9rem}
+  .buy-link a{color:var(--brand)}
+
+  /* SETUP */
+  .avatars{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:8px}
+  .av{aspect-ratio:1;max-width:100%;border-radius:18px;background:#f3f8fb;border:3px solid transparent;font-size:2.2rem;display:grid;place-items:center;transition:.15s}
+  .av.on{border-color:var(--brand);background:#e3f5f3;transform:scale(1.05)}
+
+  /* HOME */
+  .top{display:flex;align-items:center;gap:12px}
+  .me{width:56px;height:56px;border-radius:18px;background:var(--card);display:grid;place-items:center;font-size:2rem;box-shadow:0 2px 0 var(--line);flex-shrink:0}
+  .me-info{flex:1;min-width:0}
+  .me-info h2{font-size:1.3rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .lvl{display:flex;align-items:center;gap:8px;font-size:.85rem;font-weight:800;color:var(--soft)}
+  .bar{flex:1;height:10px;border-radius:999px;background:var(--line);overflow:hidden}
+  .bar i{display:block;height:100%;background:var(--brand);border-radius:999px;transition:width .6s var(--ease)}
+  .stars-pill{display:flex;align-items:center;gap:6px;background:var(--card);padding:8px 12px;border-radius:999px;font-family:var(--display);font-weight:700;box-shadow:0 2px 0 var(--line)}
+  .icon-btn{width:44px;height:44px;border-radius:14px;background:var(--card);display:grid;place-items:center;font-size:1.2rem;box-shadow:0 2px 0 var(--line);flex-shrink:0}
+  .section-t{font-family:var(--display);font-weight:600;font-size:1.15rem;margin-top:6px}
+  .subjects{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .subj{position:relative;text-align:left;border-radius:22px;padding:18px 16px 16px;color:#fff;min-height:172px;display:flex;flex-direction:column;justify-content:flex-end;gap:2px;overflow:hidden;transition:transform .15s var(--ease)}
+  .subj:active{transform:scale(.97)}
+  .subj .em{position:absolute;top:12px;right:12px;font-size:2.4rem}
+  .subj h3{font-size:1.2rem}
+  .subj small{opacity:.95;font-weight:700}
+  .subj .acc{position:absolute;top:14px;left:14px;background:rgba(255,255,255,.25);padding:2px 9px;border-radius:999px;font-size:.75rem;font-weight:800}
+  .subj.locked{filter:grayscale(.55) brightness(.95)}
+  .subj.locked::after{content:"🔒 Terkunci";position:absolute;top:14px;left:14px;background:rgba(0,0,0,.35);padding:3px 10px;border-radius:999px;font-size:.75rem;font-weight:800}
+  .s-math{background:var(--math);box-shadow:0 4px 0 #d24c31}
+  .s-eng{background:var(--eng);box-shadow:0 4px 0 #2a5ec4}
+  .s-sains{background:var(--sains);box-shadow:0 4px 0 #157e4b}
+  .s-indo{background:var(--indo);box-shadow:0 4px 0 #ab2d34}
+  .upsell{background:var(--tipbg);border:2px dashed var(--star);border-radius:20px;padding:16px;display:flex;flex-direction:column;gap:10px}
+  .upsell b{font-family:var(--display);font-size:1.1rem}
+  .badges{display:flex;gap:10px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}
+  .badges::-webkit-scrollbar{display:none}
+  .bdg{flex-shrink:0;width:86px;text-align:center;background:var(--card);border-radius:18px;padding:12px 6px;box-shadow:0 2px 0 var(--line);font-size:.72rem;font-weight:800;color:var(--soft)}
+  .bdg span{display:block;font-size:1.9rem;margin-bottom:4px}
+  .bdg.off span{filter:grayscale(1);opacity:.35}
+  .bdg.on{color:var(--ink)}
+
+  /* TOPICS */
+  .head-row{display:flex;align-items:center;gap:12px}
+  .head-row h2{font-size:1.4rem;flex:1;min-width:0}
+  .subj-hero{border-radius:22px;padding:16px 18px;color:#fff;display:flex;align-items:center;gap:14px}
+  .subj-hero .em{font-size:2.4rem}
+  .subj-hero b{font-family:var(--display);font-size:1.15rem;display:block}
+  .subj-hero small{font-weight:700;opacity:.95}
+  .topics{display:grid;gap:12px}
+  .topic{background:var(--card);border-radius:20px;padding:16px;box-shadow:0 2px 0 var(--line);display:flex;flex-direction:column;gap:12px}
+  .topic.locked{opacity:.6}
+  .t-head{display:flex;align-items:center;gap:14px}
+  .t-ic{width:52px;height:52px;border-radius:16px;display:grid;place-items:center;font-size:1.6rem;flex-shrink:0;background:var(--bg)}
+  .t-head b{font-family:var(--display);font-weight:600;font-size:1.1rem;display:block}
+  .t-head small{color:var(--soft);font-weight:700}
+  .t-status{margin-left:auto;text-align:right;font-size:.8rem;font-weight:800;color:var(--soft);white-space:nowrap}
+  .t-status .done{color:var(--ok)}
+  .t-btns{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .t-btns.one{grid-template-columns:1fr}
+
+  /* LESSON */
+  .ldots{display:flex;gap:6px;justify-content:center}
+  .ldots span{width:8px;height:8px;border-radius:999px;background:var(--line);transition:.3s}
+  .ldots span.on{width:24px;background:var(--brand)}
+  .lcard{background:var(--card);border-radius:24px;padding:22px 20px;box-shadow:0 3px 0 var(--line);display:flex;flex-direction:column;gap:14px;min-width:0}
+  .lcard h3{font-size:1.45rem}
+  .lbody{display:flex;flex-direction:column;gap:12px;font-size:1.02rem;min-width:0}
+  .lbody b{font-weight:800}
+  .big-eq{font-family:var(--display);font-weight:600;font-size:1.5rem;text-align:center;background:var(--bg);border-radius:14px;padding:10px 12px;font-variant-numeric:tabular-nums}
+  .tip{background:var(--tipbg);border-radius:14px;padding:12px 14px;font-size:.96rem}
+  .tw{overflow-x:auto;margin-inline:-4px}
+  table.kt{width:100%;border-collapse:collapse;font-size:.95rem}
+  table.kt td{padding:10px 8px;border-bottom:2px solid var(--bg);vertical-align:top}
+  table.kt tr:last-child td{border-bottom:0}
+  table.kt td.k{font-weight:800;white-space:nowrap}
+  .li{margin:0;padding-left:22px;display:grid;gap:8px}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .box{background:var(--bg);border-radius:14px;padding:12px;display:grid;gap:4px;font-size:.95rem}
+  .box b{font-family:var(--display);font-weight:600;font-size:1.05rem}
+  .chain{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+  .chain span{background:var(--bg);border-radius:999px;padding:6px 12px;font-weight:800;font-size:.92rem}
+  .chain i{font-style:normal;color:var(--soft);font-weight:800}
+  .eq{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:6px;background:var(--bg);border-radius:14px;padding:12px}
+  .eq span{background:var(--card);border-radius:10px;padding:6px 10px;font-weight:800;font-size:.9rem}
+  .eq i{font-style:normal;font-weight:800;color:var(--soft)}
+  .steps{display:grid;gap:8px}
+  .steps div{background:var(--bg);border-radius:12px;padding:10px 12px;font-weight:700}
+  .ex{background:var(--bg);border-radius:14px;padding:12px 14px;display:grid;gap:6px}
+  .timeline{display:grid;gap:10px}
+  .tl{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:start}
+  .tl b{background:var(--indo);color:#fff;border-radius:10px;padding:4px 10px;font-size:.82rem;white-space:nowrap}
+  .pv{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;text-align:center}
+  .pv div{background:var(--bg);border-radius:14px;padding:10px 6px;display:grid;gap:2px}
+  .pv b{font-family:var(--display);font-size:2rem;color:var(--math)}
+  .pv small{font-weight:800;color:var(--soft)}
+  .pv span{font-weight:800}
+  .lnav{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .lnav .btn{padding-inline:10px}
+
+  /* WIDGETS */
+  .wg{background:var(--bg);border-radius:18px;padding:14px;display:grid;gap:12px}
+  .rng{display:grid;gap:4px;font-weight:800;font-size:.92rem}
+  .rng input{width:100%;accent-color:var(--brand)}
+  .groups{display:flex;flex-wrap:wrap;gap:8px}
+  .grp{display:flex;flex-wrap:wrap;gap:4px;padding:7px;border-radius:12px;background:var(--card);max-width:100%}
+  .grp i{width:14px;height:14px;border-radius:50%;display:block}
+  .grp.g0 i{background:var(--math)}.grp.g1 i{background:var(--eng)}.grp.g2 i{background:var(--sains)}.grp.g3 i{background:var(--star)}
+  .wg-out{font-family:var(--display);font-weight:600;font-size:1.15rem;text-align:center}
+  .nums{display:flex;flex-wrap:wrap;gap:6px}
+  .num{width:40px;height:40px;border-radius:12px;background:var(--card);font-family:var(--display);font-weight:600;font-size:1.05rem;box-shadow:0 2px 0 var(--line)}
+  .num.on{background:var(--brand);color:#fff;box-shadow:0 2px 0 var(--brand-2)}
+  .ttab{display:grid;grid-template-columns:1fr 1fr;gap:6px 14px;font-size:1.02rem;font-variant-numeric:tabular-nums}
+  .pie-wrap{display:flex;gap:16px;align-items:center;flex-wrap:wrap;justify-content:center}
+  .pie{width:130px;height:130px;max-width:100%}
+  .fbar{display:flex;height:28px;border-radius:8px;overflow:hidden;border:2px solid var(--ink);flex:1;min-width:150px}
+  .fbar span{flex:1;border-right:2px solid var(--ink);background:var(--card)}
+  .fbar span:last-child{border-right:0}
+  .fbar span.on{background:var(--math)}
+  .col-wrap{display:grid;gap:12px;justify-items:center}
+  .col-grid{display:grid;grid-template-columns:34px repeat(3,50px);gap:4px 6px;align-items:center;font-family:var(--display);font-weight:600;font-size:1.8rem;font-variant-numeric:tabular-nums}
+  .col-grid .c{height:46px;display:grid;place-items:center;border-radius:10px;line-height:1;text-align:center}
+  .col-grid .carry{height:24px;font-size:1rem;color:var(--math)}
+  .col-grid .op{color:var(--soft)}
+  .col-grid .hl{background:var(--tipbg)}
+  .col-grid .res{color:var(--brand)}
+  .col-grid s{font-size:.9rem;color:var(--soft);display:block}
+  .col-grid em{font-style:normal;font-size:1.2rem;color:var(--math)}
+  .col-grid .line{grid-column:1/-1;height:3px;background:var(--ink);border-radius:2px}
+  .col-text{text-align:center;font-weight:700;min-height:3em}
+  .vgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+  .vc{background:var(--card);border-radius:14px;padding:10px 10px 12px 12px;display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"em spk" "w w" "m m";gap:2px 8px;align-items:center;min-width:0}
+  .vc .vem{grid-area:em;font-size:1.9rem;line-height:1.1}
+  .vc b{grid-area:w;font-family:var(--display);font-weight:600;font-size:1.12rem;overflow-wrap:break-word;margin-top:4px}
+  .vc small{grid-area:m;color:var(--soft);font-weight:700;overflow-wrap:break-word}
+  .vc .spk{grid-area:spk}
+  .vc.noem{grid-template-areas:"w spk" "m m"}
+  .vc.noem b{margin-top:0}
+  .spk{width:38px;height:38px;border-radius:12px;background:var(--bg);font-size:1rem;flex-shrink:0}
+  .sent{display:flex;gap:10px;align-items:center;background:var(--bg);border-radius:14px;padding:10px 12px}
+  .sent b{display:block}
+  .sent small{color:var(--soft);font-weight:700}
+  .sent .spk{background:var(--card)}
+  .planets{display:flex;align-items:flex-end;gap:14px;overflow-x:auto;padding:6px 2px 4px}
+  .sun{width:70px;height:70px;border-radius:50%;background:radial-gradient(circle at 40% 40%,#ffe28a,var(--star) 60%,#f08a24);flex-shrink:0;margin-left:-36px}
+  .pl{display:grid;justify-items:center;gap:6px;flex-shrink:0;font-size:.78rem}
+  .orb{border-radius:50%;display:block;position:relative}
+  .orb.ring::after{content:"";position:absolute;left:-30%;right:-30%;top:42%;height:16%;border:2px solid #b89a5a;border-radius:50%}
+  .hari{display:grid;gap:8px}
+  .hr{display:grid;grid-template-columns:56px 1fr;gap:12px;align-items:center;background:var(--card);border-radius:14px;padding:8px 12px 8px 8px}
+  .hr .hd{display:grid;justify-items:center;background:var(--bg);border-radius:10px;padding:4px 0;font-weight:800;font-size:.75rem;color:var(--soft)}
+  .hr .hd b{font-family:var(--display);font-size:1.3rem;color:var(--ink)}
+  .hr small{color:var(--soft);font-weight:700;display:block}
+  .hr.today{background:var(--tipbg)}
+  .hr.today .hd{background:var(--star)}
+
+  /* QUIZ */
+  .qtop{display:flex;align-items:center;gap:12px}
+  .qbar{flex:1;height:14px;border-radius:999px;background:var(--line);overflow:hidden}
+  .qbar i{display:block;height:100%;background:var(--star);border-radius:999px;transition:width .4s var(--ease)}
+  .streak{font-family:var(--display);font-weight:700;color:var(--math);min-width:44px;text-align:right}
+  .timer{font-family:var(--display);font-weight:700;font-size:1.2rem;min-width:58px;text-align:right}
+  .timer.low{color:var(--bad)}
+  .qcard{background:var(--card);border-radius:26px;padding:24px 20px;text-align:center;box-shadow:0 3px 0 var(--line);display:flex;flex-direction:column;gap:12px;align-items:center}
+  .qchip{font-weight:800;font-size:.78rem;padding:4px 12px;border-radius:999px;color:#fff}
+  .qvis{font-size:4.2rem;line-height:1}
+  .qtext{font-family:var(--display);font-weight:600;font-size:clamp(1.25rem,5vw,1.6rem)}
+  .qtext.big{font-size:clamp(2.2rem,10vw,3rem)}
+  .opts{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .opt{background:var(--card);border:3px solid var(--line);border-radius:18px;padding:16px 10px;font-family:var(--display);font-weight:600;font-size:1.15rem;min-height:70px;box-shadow:0 3px 0 var(--line);transition:transform .1s,border-color .2s,background .2s}
+  .opt:active{transform:translateY(2px)}
+  .opt.ok{background:#e4f7ec;border-color:var(--ok);color:#136b40}
+  .opt.bad{background:#fdeaea;border-color:var(--bad);color:#a02a2e;animation:shake .35s}
+  .opt:disabled{cursor:default}
+  @keyframes shake{25%,75%{transform:translateX(-5px)}50%{transform:translateX(5px)}}
+  .feedback{border-radius:20px;padding:16px;display:flex;flex-direction:column;gap:10px}
+  .feedback.ok{background:#e4f7ec}
+  .feedback.bad{background:#fdeaea}
+  .feedback b{font-family:var(--display);font-size:1.2rem}
+
+  /* RESULT */
+  .result{text-align:center;align-items:center}
+  .big-stars{font-size:3.2rem;letter-spacing:6px}
+  .big-stars .off{filter:grayscale(1);opacity:.3}
+  .score{font-family:var(--display);font-weight:700;font-size:3.4rem;line-height:1}
+  .reward{display:inline-flex;gap:14px;flex-wrap:wrap;justify-content:center;font-weight:800}
+  .reward span{background:var(--card);padding:8px 14px;border-radius:999px;box-shadow:0 2px 0 var(--line)}
+  .newbadge{background:var(--tipbg);border-radius:18px;padding:12px 16px;font-weight:800}
+  .row-btn{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:100%}
+
+  /* REPORT */
+  .rep-row{display:grid;grid-template-columns:34px 1fr auto;gap:12px;align-items:center;padding:10px 0;border-bottom:2px solid var(--bg)}
+  .rep-row:last-child{border-bottom:0}
+  .rep-row .bar{height:12px}
+  .rep-row b{font-family:var(--display);font-weight:600}
+  .rep-num{font-weight:800;font-variant-numeric:tabular-nums;text-align:right;font-size:.9rem}
+  .totals{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+  .totals div{background:var(--card);border-radius:18px;padding:14px 8px;text-align:center;box-shadow:0 2px 0 var(--line)}
+  .totals b{display:block;font-family:var(--display);font-size:1.5rem;font-variant-numeric:tabular-nums}
+  .totals small{color:var(--soft);font-weight:700;font-size:.78rem}
+
+  canvas#confetti{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:60}
+  .toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translate(-50%,20px);background:var(--ink);color:#fff;padding:10px 18px;border-radius:999px;font-weight:800;font-size:.9rem;opacity:0;transition:.3s;z-index:70;pointer-events:none;max-width:calc(100% - 32px);text-align:center}
+  .toast.show{opacity:1;transform:translate(-50%,0)}
+  @media(max-width:380px){.opts{grid-template-columns:1fr}.subjects{grid-template-columns:1fr}.vgrid{grid-template-columns:1fr}.two{grid-template-columns:1fr}.col-grid{grid-template-columns:28px repeat(3,44px)}}
+  @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<main class="app" id="app">
+
+  <!-- GATE -->
+  <section class="screen" id="s-gate" hidden>
+    <div class="logo"><span class="logo-badge">⭐</span>Juara Kelas</div>
+    <div class="hero-card">
+      <span class="small" style="font-weight:800;opacity:.85">Untuk anak 8–12 tahun · SD kelas 3–6</span>
+      <h1>Belajar sambil main, jadi juara di kelas!</h1>
+      <p>Materi lengkap dengan peraga interaktif, lalu latihan soal yang selalu baru, lengkap dengan bintang, level, dan lencana.</p>
+      <div class="chips"><span>🧮 Matematika</span><span>🔤 B. Inggris</span><span>🔬 Sains</span><span>🗺️ Indonesia</span></div>
+      <span class="deco" aria-hidden="true">🏆</span>
+    </div>
+    <div class="card">
+      <form id="gateForm" novalidate>
+        <label class="lbl" for="code">Kode akses</label>
+        <input class="field" id="code" placeholder="Contoh: JUARA2026" autocomplete="off" autocapitalize="characters" />
+        <p class="err" id="codeErr" role="alert"></p>
+        <button class="btn btn-main full" type="submit">Masuk</button>
+      </form>
+      <div class="or" style="margin-block:16px">atau</div>
+      <button class="btn btn-ghost full" id="tryFree">Coba gratis dulu</button>
+      <p class="buy-link" style="margin-top:14px">Belum punya kode? <a id="buyLink1" target="_blank" rel="noopener">Beli akses lengkap</a></p>
+    </div>
+  </section>
+
+  <!-- SETUP -->
+  <section class="screen" id="s-setup" hidden>
+    <div class="logo"><span class="logo-badge">⭐</span>Juara Kelas</div>
+    <div class="card">
+      <h2 style="font-size:1.5rem">Halo! Siapa namamu?</h2>
+      <p class="muted" style="margin-bottom:14px">Namamu akan muncul di papan prestasi.</p>
+      <label class="lbl" for="kidName">Nama panggilan</label>
+      <input class="field name" id="kidName" maxlength="14" placeholder="Contoh: Dimas" autocomplete="off" />
+      <label class="lbl" style="margin-top:16px">Pilih karakter</label>
+      <div class="avatars" id="avatarPick"></div>
+      <p class="err" id="setupErr" role="alert"></p>
+      <button class="btn btn-main full" id="setupGo">Mulai petualangan</button>
+    </div>
+  </section>
+
+  <!-- HOME -->
+  <section class="screen" id="s-home" hidden>
+    <div class="top">
+      <div class="me" id="hAv"></div>
+      <div class="me-info">
+        <h2 id="hName"></h2>
+        <div class="lvl"><span id="hLvl"></span><div class="bar"><i id="hBar"></i></div></div>
+      </div>
+      <div class="stars-pill">⭐ <span id="hStars">0</span></div>
+    </div>
+    <div class="section-t">Mau belajar apa hari ini?</div>
+    <div class="subjects" id="subjects"></div>
+    <div class="upsell" id="upsell" hidden>
+      <b>🔓 Buka semua materi</b>
+      <p class="small">Mode gratis hanya berisi materi dan latihan perkalian. Akses lengkap membuka semua topik Matematika, Bahasa Inggris, Sains, dan Pengetahuan Indonesia.</p>
+      <a class="btn btn-star full" id="buyLink2" target="_blank" rel="noopener" style="text-decoration:none">Beli akses lengkap</a>
+      <button class="btn btn-ghost full" id="enterCode">Saya sudah punya kode</button>
+    </div>
+    <div class="section-t">Lencanaku</div>
+    <div class="badges" id="badges"></div>
+    <button class="btn btn-ghost full" id="openReport">📊 Laporan untuk orang tua</button>
+  </section>
+
+  <!-- TOPICS -->
+  <section class="screen" id="s-subject" hidden>
+    <div class="head-row"><button class="icon-btn" data-back="home" aria-label="Kembali">←</button><h2 id="sTitle"></h2></div>
+    <div class="subj-hero" id="sHero"></div>
+    <div class="topics" id="topics"></div>
+  </section>
+
+  <!-- LESSON -->
+  <section class="screen" id="s-lesson" hidden>
+    <div class="head-row"><button class="icon-btn" id="lessonBack" aria-label="Kembali">←</button><h2 id="lTitle"></h2></div>
+    <div class="ldots" id="lDots" aria-hidden="true"></div>
+    <article class="lcard">
+      <span class="qchip" id="lChip" style="align-self:flex-start"></span>
+      <h3 id="lHead"></h3>
+      <div class="lbody" id="lBody"></div>
+      <div id="lWidget"></div>
+    </article>
+    <div class="lnav">
+      <button class="btn btn-ghost" id="lPrev">← Sebelumnya</button>
+      <button class="btn btn-main" id="lNext">Lanjut →</button>
+    </div>
+  </section>
+
+  <!-- QUIZ -->
+  <section class="screen" id="s-quiz" hidden>
+    <div class="qtop">
+      <button class="icon-btn" id="quitQuiz" aria-label="Keluar dari latihan">✕</button>
+      <div class="qbar"><i id="qBar"></i></div>
+      <span class="streak" id="qStreak"></span>
+      <span class="timer" id="qTimer" hidden></span>
+    </div>
+    <div class="qcard">
+      <span class="qchip" id="qChip"></span>
+      <div class="qvis" id="qVis" hidden></div>
+      <div class="qtext" id="qText"></div>
+    </div>
+    <div class="opts" id="opts"></div>
+    <div class="feedback" id="feedback" hidden>
+      <b id="fbTitle"></b>
+      <p id="fbText"></p>
+      <button class="btn btn-main full" id="nextQ">Lanjut</button>
+    </div>
+  </section>
+
+  <!-- RESULT -->
+  <section class="screen result" id="s-result" hidden>
+    <div class="card" style="width:100%;display:flex;flex-direction:column;gap:14px;align-items:center">
+      <span class="muted" style="font-weight:800" id="rTitle"></span>
+      <div class="big-stars" id="rStars"></div>
+      <div class="score" id="rScore"></div>
+      <p class="muted" id="rMsg"></p>
+      <div class="reward" id="rReward"></div>
+      <div id="rBadges" style="display:grid;gap:8px;width:100%"></div>
+    </div>
+    <div class="upsell" id="rUpsell" hidden style="width:100%;text-align:left">
+      <b>Seru, kan? Masih banyak lagi!</b>
+      <p class="small">Akses lengkap membuka semua materi dan latihan: pecahan, soal cerita, Bahasa Inggris, Sains, Pengetahuan Indonesia, dan Tantangan 60 Detik.</p>
+      <a class="btn btn-star full" id="buyLink3" target="_blank" rel="noopener" style="text-decoration:none">Beli akses lengkap</a>
+    </div>
+    <button class="btn btn-ghost full" id="rLesson">📖 Pelajari lagi materinya</button>
+    <div class="row-btn">
+      <button class="btn btn-ghost" id="rHome">Pilih topik</button>
+      <button class="btn btn-main" id="rAgain">Latihan lagi</button>
+    </div>
+  </section>
+
+  <!-- REPORT -->
+  <section class="screen" id="s-report" hidden>
+    <div class="head-row"><button class="icon-btn" data-back="home" aria-label="Kembali">←</button><h2>Laporan Belajar</h2></div>
+    <div class="totals" id="totals"></div>
+    <div class="card">
+      <h3 style="font-size:1.15rem;margin-bottom:6px">Ketepatan per pelajaran</h3>
+      <div id="repRows"></div>
+      <p class="muted small" style="margin-top:10px" id="repTip"></p>
+    </div>
+    <div class="card" style="display:grid;gap:10px">
+      <h3 style="font-size:1.15rem">Pengaturan</h3>
+      <button class="btn btn-ghost full" id="toggleSound"></button>
+      <button class="btn btn-ghost full" id="editProfile">Ganti nama / karakter</button>
+      <div id="resetBox" style="display:grid;gap:10px"></div>
+    </div>
+  </section>
+</main>
+
+<canvas id="confetti" hidden></canvas>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+/* ================== PENGATURAN ==================
+   CODES   : kode akses untuk membuka semua materi (huruf besar).
+   BUY_URL : link halaman pembelian.
+================================================== */
+const CONFIG = {
+  CODES: ['JUARA2026'],
+  BUY_URL: 'https://lynk.id/'
+};
+
+/* ---------- penyimpanan (per perangkat) ---------- */
+const KEY = 'juara_kelas_v1';
+const fresh = () => ({ access:null, name:'', avatar:'🦁', xp:0, stars:0,
+  stats:{math:{q:0,c:0},eng:{q:0,c:0},sains:{q:0,c:0},indo:{q:0,c:0}},
+  topics:{}, badges:[], best60:0, sound:true });
+let D = fresh();
+try { const raw = localStorage.getItem(KEY); if (raw) { const s = JSON.parse(raw); D = Object.assign(fresh(), s); D.topics = s.topics || {}; } } catch (e) {}
+const save = () => { try { localStorage.setItem(KEY, JSON.stringify(D)); } catch (e) {} };
+
+/* ---------- helper ---------- */
+const $ = s => document.querySelector(s);
+const R = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
+const pick = a => a[Math.floor(Math.random() * a.length)];
+const shuffle = a => { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const rp = n => 'Rp' + n.toLocaleString('id-ID');
+const gcd = (a, b) => b ? gcd(b, a % b) : a;
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function toast(t){ const el=$('#toast'); el.textContent=t; el.classList.add('show'); clearTimeout(el._t); el._t=setTimeout(()=>el.classList.remove('show'),2200); }
+const CAN_SPEAK = 'speechSynthesis' in window && 'SpeechSynthesisUtterance' in window;
+function speak(text){ try { const u = new SpeechSynthesisUtterance(text); u.lang = 'en-US'; u.rate = .85; speechSynthesis.cancel(); speechSynthesis.speak(u); } catch (e) {} }
+document.addEventListener('click', e => { const b = e.target.closest('[data-say]'); if (b) speak(b.dataset.say); });
+
+/* Pilihan ganda dari jawaban + pembuat pengecoh */
+function mc(answer, makeWrong, fmt = x => String(x)) {
+  const set = new Set([fmt(answer)]); let g = 0;
+  while (set.size < 4 && g++ < 80) { const w = makeWrong(); if (w !== null && w !== undefined && !(typeof w === 'number' && w < 0)) set.add(fmt(w)); }
+  const options = shuffle([...set]);
+  return { options, answer: options.indexOf(fmt(answer)) };
+}
+const near = (ans, spread) => () => { const v = ans + pick([-1, 1]) * R(1, spread); return v >= 0 ? v : null; };
+
+/* Pembuat HTML materi */
+const tbl = rows => `<div class="tw"><table class="kt">${rows.map(r => `<tr>${r.map((c, i) => `<td${i === 0 ? ' class="k"' : ''}>${c}</td>`).join('')}</tr>`).join('')}</table></div>`;
+const chain = items => `<div class="chain">${items.map(x => `<span>${x}</span>`).join('<i>→</i>')}</div>`;
+const sent = list => list.map(([en, id]) => `<div class="sent">${CAN_SPEAK ? `<button class="spk" data-say="${esc(en)}" aria-label="Dengarkan">🔊</button>` : ''}<div><b>${en}</b><small>${id}</small></div></div>`).join('');
+const tip = t => `<div class="tip">${t}</div>`;
+
+/* ================== SOAL MATEMATIKA ================== */
+const NAMES = ['Rani','Budi','Dimas','Sari','Putri','Andi','Nisa','Fajar','Lala','Rizky'];
+const MATH = {
+  kali() {
+    const hi = D.xp > 400 ? 12 : 10, a = R(2, hi), b = R(2, hi), ans = a * b;
+    return { text:`${a} × ${b} = ?`, big:true, ...mc(ans, () => pick([ans + a, ans - a, ans + b, ans - b, (a + 1) * b, a * (b - 1), ans + R(1, 5), ans - R(1, 5)])), explain:`${a} × ${b} artinya ${a} kelompok berisi ${b}. Hasilnya ${ans}.` };
+  },
+  bagi() {
+    const b = R(2, 10), c = R(2, 10), a = b * c;
+    return { text:`${a} : ${b} = ?`, big:true, ...mc(c, near(c, 3)), explain:`Karena ${b} × ${c} = ${a}, maka ${a} : ${b} = ${c}.` };
+  },
+  campur() {
+    const plus = Math.random() < .5;
+    let a = R(120, 899), b = R(25, 399);
+    if (!plus && b > a) [a, b] = [b, a];
+    const ans = plus ? a + b : a - b;
+    return { text:`${a} ${plus ? '+' : '−'} ${b} = ?`, big:true, ...mc(ans, () => pick([ans + 10, ans - 10, ans + 100, ans - 100, ans + 1, ans - 1, ans + 20])),
+      explain: plus ? `${a} + ${b} = ${ans}. Hitung bersusun mulai dari satuan, jangan lupa simpanannya.` : `${a} − ${b} = ${ans}. Cek: ${ans} + ${b} = ${a}.` };
+  },
+  pecahan() {
+    if (Math.random() < .4) {
+      if (Math.random() < .5) {
+        const d = R(5, 12), nums = shuffle(Array.from({ length: d - 1 }, (_, i) => i + 1)).slice(0, 4), mx = Math.max(...nums);
+        const options = nums.map(n => `${n}/${d}`);
+        return { text:'Pecahan yang paling besar adalah …', options, answer: options.indexOf(`${mx}/${d}`), explain:`Penyebutnya sama (${d}), jadi bandingkan pembilangnya. ${mx} paling besar, maka ${mx}/${d} paling besar.` };
+      }
+      const n = R(1, 3), dens = shuffle([2,3,4,5,6,7,8,9,10].filter(x => x > n)).slice(0, 4), mn = Math.min(...dens);
+      const options = dens.map(x => `${n}/${x}`);
+      return { text:'Pecahan yang paling besar adalah …', options, answer: options.indexOf(`${n}/${mn}`), explain:`Pembilangnya sama (${n}). Makin kecil penyebutnya, makin besar potongannya. Jadi ${n}/${mn} paling besar.` };
+    }
+    let q = R(2, 9), p = R(1, q - 1);
+    while (gcd(p, q) !== 1) { q = R(2, 9); p = R(1, q - 1); }
+    const k = R(2, 5), P = p * k, Q = q * k;
+    const same = (a, b) => a[0] * b[1] === a[1] * b[0];
+    const res = mc([p, q], () => { const s = R(2, 9), r = R(1, s - 1); return same([r, s], [p, q]) ? null : [r, s]; }, f => `${f[0]}/${f[1]}`);
+    return { text:`Bentuk paling sederhana dari ${P}/${Q} adalah …`, ...res, explain:`Bagi pembilang dan penyebut dengan ${k}: ${P} : ${k} = ${p} dan ${Q} : ${k} = ${q}. Jadi ${P}/${Q} = ${p}/${q}.` };
+  },
+  cerita() {
+    const n = pick(NAMES), t = R(0, 6);
+    if (t === 0) { const a = R(3, 9), b = R(6, 12), ans = a * b;
+      return { text:`${n} punya ${a} kotak pensil. Setiap kotak berisi ${b} pensil. Berapa jumlah semua pensil ${n}?`, ...mc(ans, near(ans, 12)), explain:`Kata kunci "setiap" → perkalian. ${a} × ${b} = ${ans} pensil.` }; }
+    if (t === 1) { const a = R(3, 8), b = R(3, 9), tot = a * b;
+      return { text:`Ada ${tot} kue yang dibagi rata kepada ${a} anak. Berapa kue yang didapat setiap anak?`, ...mc(b, near(b, 3)), explain:`Kata kunci "dibagi rata" → pembagian. ${tot} : ${a} = ${b} kue.` }; }
+    if (t === 2) { const a = R(2, 6), p = pick([2000, 2500, 3000, 3500, 4000, 5000]), ans = a * p;
+      const r = mc(ans, () => pick([ans + p, ans - p, ans + 500, ans - 500, ans + 1000]));
+      return { text:`${n} membeli ${a} buku tulis. Harga satu buku ${rp(p)}. Berapa yang harus dibayar?`, options: r.options.map(o => rp(Number(o))), answer: r.answer, explain:`${a} × ${rp(p)} = ${rp(ans)}.` }; }
+    if (t === 3) { const a = R(26, 40), b = R(10, a - 8), ans = a - b;
+      return { text:`Di kelas ada ${a} siswa. Sebanyak ${b} siswa adalah perempuan. Berapa siswa laki-laki?`, ...mc(ans, near(ans, 5)), explain:`Yang dicari adalah sisanya → pengurangan. ${a} − ${b} = ${ans} siswa.` }; }
+    if (t === 4) { const a = R(5, 15), d = R(3, 7), ans = a * d;
+      return { text:`${n} membaca ${a} halaman buku setiap hari. Berapa halaman yang dibaca dalam ${d} hari?`, ...mc(ans, near(ans, 10)), explain:`${a} halaman × ${d} hari = ${ans} halaman.` }; }
+    if (t === 5) { const s = R(25, 60), m = R(10, s - 5), b = R(5, 20), ans = s - m + b;
+      return { text:`${n} punya ${s} kelereng. Ia memberikan ${m} kelereng kepada temannya, lalu membeli ${b} kelereng lagi. Berapa kelereng ${n} sekarang?`, ...mc(ans, near(ans, 8)), explain:`"Memberikan" → dikurangi, "membeli lagi" → ditambah. ${s} − ${m} + ${b} = ${ans}.` }; }
+    const h = R(7, 18), mm = pick([0, 15, 30, 45]), dur = pick([45, 60, 75, 90, 105, 120]);
+    const end = h * 60 + mm + dur, fmtT = m => `${String(Math.floor(m / 60)).padStart(2, '0')}.${String(m % 60).padStart(2, '0')}`;
+    return { text:`Film dimulai pukul ${fmtT(h * 60 + mm)} dan berlangsung ${dur} menit. Pukul berapa film selesai?`, ...mc(end, () => pick([end + 15, end - 15, end + 30, end - 30, end + 60, end - 60]), fmtT),
+      explain:`${dur} menit = ${Math.floor(dur / 60)} jam ${dur % 60} menit. ${fmtT(h * 60 + mm)} + ${dur} menit = pukul ${fmtT(end)}.` };
+  }
+};
+MATH.kilat = () => MATH[pick(['kali', 'kali', 'bagi', 'campur'])]();
+
+/* ================== BAHASA INGGRIS ================== */
+const VOCAB = {
+  hewan: [['kucing','cat','🐱'],['anjing','dog','🐶'],['burung','bird','🐦'],['ikan','fish','🐟'],['gajah','elephant','🐘'],['kuda','horse','🐴'],['sapi','cow','🐮'],['ayam','chicken','🐔'],['kelinci','rabbit','🐰'],['kura-kura','turtle','🐢'],['monyet','monkey','🐒'],['singa','lion','🦁']],
+  makanan: [['apel','apple','🍎'],['pisang','banana','🍌'],['jeruk','orange','🍊'],['anggur','grapes','🍇'],['semangka','watermelon','🍉'],['roti','bread','🍞'],['susu','milk','🥛'],['telur','egg','🥚'],['nasi','rice','🍚'],['air','water','💧']],
+  benda: [['rumah','house','🏠'],['sekolah','school','🏫'],['buku','book','📚'],['pensil','pencil','✏️'],['tas','bag','🎒'],['mobil','car','🚗'],['sepeda','bicycle','🚲'],['pesawat','airplane','✈️'],['kapal','ship','🚢'],['kereta','train','🚆'],['bola','ball','⚽'],['jam','clock','⏰'],['sepatu','shoes','👟'],['baju','shirt','👕'],['payung','umbrella','☂️'],['kunci','key','🔑']],
+  alam: [['matahari','sun','☀️'],['bulan','moon','🌙'],['bintang','star','⭐'],['pohon','tree','🌳'],['bunga','flower','🌸'],['hujan','rain','🌧️'],['awan','cloud','☁️'],['gunung','mountain','⛰️'],['laut','sea','🌊'],['pelangi','rainbow','🌈']],
+  sifat: [['merah','red','🟥'],['biru','blue','🟦'],['hijau','green','🟩'],['kuning','yellow','🟨'],['hitam','black','⬛'],['putih','white','⬜'],['besar','big',''],['kecil','small',''],['senang','happy','😊'],['sedih','sad','😢'],['panas','hot',''],['dingin','cold',''],['cepat','fast',''],['lambat','slow',''],['cantik','beautiful',''],['pintar','smart','']],
+  kerja: [['makan','eat','🍽️'],['minum','drink','🥤'],['tidur','sleep','😴'],['berlari','run','🏃'],['membaca','read','📖'],['menulis','write','✍️'],['bernyanyi','sing','🎤'],['berenang','swim','🏊']]
+};
+const PICTURE_OK = ['hewan', 'makanan', 'benda', 'alam'];
+const SENTENCES = {
+  hewan: [['I have a cat.','Saya punya seekor kucing.'],['The elephant is big.','Gajah itu besar.'],['Birds can fly.','Burung bisa terbang.']],
+  makanan: [['I like bananas.','Saya suka pisang.'],['She drinks milk every morning.','Dia minum susu setiap pagi.'],['This apple is red.','Apel ini berwarna merah.']],
+  benda: [['This is my bag.','Ini tas saya.'],['I go to school by bicycle.','Saya pergi ke sekolah naik sepeda.'],['Where is my pencil?','Di mana pensil saya?']],
+  alam: [['The sun is hot.','Matahari itu panas.'],['I can see the moon at night.','Saya bisa melihat bulan di malam hari.'],['It is raining.','Sedang turun hujan.']],
+  sifat: [['The sky is blue.','Langit berwarna biru.'],['I am happy.','Saya senang.'],['The car is fast.','Mobil itu cepat.']],
+  kerja: [['I can swim.','Saya bisa berenang.'],['We eat breakfast.','Kami sarapan.'],['They read books.','Mereka membaca buku.']]
+};
+function engQ(cat, recent) {
+  const list = VOCAB[cat];
+  let it, g = 0;
+  do { it = pick(list); } while (recent.includes(it[1]) && g++ < 20);
+  recent.push(it[1]); if (recent.length > 5) recent.shift();
+  const r = Math.random();
+  if (PICTURE_OK.includes(cat) && r < .4) return { vis: it[2], text: 'What is this?', ...mc(it[1], () => pick(list)[1]), explain: `${it[2]} dalam bahasa Inggris adalah "${it[1]}", artinya ${it[0]}.` };
+  if (r < .7) return { text: `Bahasa Inggris dari "${it[0]}" adalah …`, ...mc(it[1], () => pick(list)[1]), explain: `"${it[0]}" dalam bahasa Inggris adalah "${it[1]}".` };
+  return { text: `Arti kata "${it[1]}" adalah …`, ...mc(it[0], () => pick(list)[0]), explain: `"${it[1]}" artinya "${it[0]}".` };
+}
+const AAN = [['apple','an'],['egg','an'],['elephant','an'],['orange','an'],['umbrella','an'],['airplane','an'],['ant','an'],['owl','an'],['ice cream','an'],
+  ['cat','a'],['dog','a'],['book','a'],['ball','a'],['house','a'],['pencil','a'],['bag','a'],['car','a'],['tree','a'],['banana','a'],['rabbit','a'],['monkey','a'],['lion','a'],['star','a'],['bicycle','a']];
+function aanQ(recent) {
+  let it, g = 0;
+  do { it = pick(AAN); } while (recent.includes(it[0]) && g++ < 20);
+  recent.push(it[0]); if (recent.length > 6) recent.shift();
+  const options = ['a', 'an'];
+  return { text: `___ ${it[0]}`, big: true, options, answer: options.indexOf(it[1]),
+    explain: it[1] === 'an' ? `"${it[0]}" diawali bunyi vokal, jadi pakai "an": an ${it[0]}.` : `"${it[0]}" diawali bunyi konsonan, jadi pakai "a": a ${it[0]}.` };
+}
+
+/* ================== BANK SOAL SAINS & INDONESIA ==================
+   Format: [topik, pertanyaan, jawaban benar, pengecoh 1, pengecoh 2, pengecoh 3, penjelasan] */
+const SAINS = [
+  ['tata','Planet yang paling dekat dengan Matahari adalah …','Merkurius','Venus','Bumi','Mars','Urutan planet dari Matahari: Merkurius, Venus, Bumi, Mars, Jupiter, Saturnus, Uranus, Neptunus.'],
+  ['tata','Planet terbesar di tata surya adalah …','Jupiter','Saturnus','Bumi','Neptunus','Jupiter adalah planet terbesar. Diameternya lebih dari 11 kali diameter Bumi.'],
+  ['tata','Planet yang dijuluki "planet merah" adalah …','Mars','Venus','Jupiter','Merkurius','Permukaan Mars kemerahan karena banyak mengandung besi oksida (karat).'],
+  ['tata','Planet yang terkenal dengan cincinnya yang besar dan indah adalah …','Saturnus','Merkurius','Mars','Venus','Cincin Saturnus tersusun dari bongkahan es dan batuan.'],
+  ['tata','Pusat tata surya kita adalah …','Matahari','Bumi','Bulan','Jupiter','Semua planet di tata surya beredar mengelilingi Matahari.'],
+  ['tata','Jumlah planet di tata surya ada …','8','9','7','10','Delapan planet: Merkurius, Venus, Bumi, Mars, Jupiter, Saturnus, Uranus, Neptunus.'],
+  ['tata','Satelit alami Bumi adalah …','Bulan','Matahari','Mars','Bintang','Bulan beredar mengelilingi Bumi, sehingga disebut satelit alami Bumi.'],
+  ['tata','Perputaran Bumi pada porosnya disebut …','Rotasi','Revolusi','Gerhana','Orbit','Rotasi Bumi menyebabkan terjadinya siang dan malam.'],
+  ['tata','Peredaran Bumi mengelilingi Matahari disebut …','Revolusi','Rotasi','Gravitasi','Erosi','Satu kali revolusi Bumi lamanya sekitar 365 hari atau satu tahun.'],
+  ['tumbuhan','Tumbuhan membuat makanannya sendiri melalui proses …','Fotosintesis','Respirasi','Penguapan','Penyerbukan','Fotosintesis memerlukan cahaya matahari, air, dan karbon dioksida.'],
+  ['tumbuhan','Gas yang diserap tumbuhan saat fotosintesis adalah …','Karbon dioksida','Oksigen','Nitrogen','Helium','Tumbuhan menyerap karbon dioksida dari udara dan melepaskan oksigen.'],
+  ['tumbuhan','Selain makanan, fotosintesis juga menghasilkan …','Oksigen','Karbon dioksida','Asap','Nitrogen','Oksigen hasil fotosintesis kita hirup saat bernapas.'],
+  ['tumbuhan','Zat hijau daun yang membantu fotosintesis disebut …','Klorofil','Glukosa','Oksigen','Stomata','Klorofil menangkap cahaya matahari untuk fotosintesis.'],
+  ['tumbuhan','Bagian tumbuhan tempat utama terjadinya fotosintesis adalah …','Daun','Akar','Batang','Bunga','Daun mengandung banyak klorofil, jadi fotosintesis paling banyak terjadi di daun.'],
+  ['tumbuhan','Bagian tumbuhan yang menyerap air dari dalam tanah adalah …','Akar','Daun','Bunga','Buah','Akar menyerap air dan zat hara dari tanah, juga menopang tumbuhan.'],
+  ['tumbuhan','Bagian tumbuhan yang mengangkut air dari akar ke daun adalah …','Batang','Bunga','Buah','Biji','Batang menyalurkan air dari akar ke daun, dan makanan dari daun ke seluruh tubuh tumbuhan.'],
+  ['tumbuhan','Bagian tumbuhan yang berperan dalam perkembangbiakan adalah …','Bunga','Akar','Batang','Daun','Bunga tempat terjadinya penyerbukan, yang kemudian menghasilkan buah dan biji.'],
+  ['hewan','Hewan pemakan tumbuhan disebut …','Herbivora','Karnivora','Omnivora','Insektivora','Contoh herbivora: sapi, kambing, dan kelinci.'],
+  ['hewan','Hewan pemakan daging disebut …','Karnivora','Herbivora','Omnivora','Mamalia','Contoh karnivora: harimau, singa, dan elang.'],
+  ['hewan','Hewan pemakan tumbuhan dan daging disebut …','Omnivora','Herbivora','Karnivora','Mamalia','Contoh omnivora: ayam, beruang, dan tikus.'],
+  ['hewan','Ikan bernapas menggunakan …','Insang','Paru-paru','Kulit','Trakea','Insang mengambil oksigen yang terlarut di dalam air.'],
+  ['hewan','Cacing tanah bernapas menggunakan …','Kulit','Insang','Paru-paru','Trakea','Kulit cacing tanah yang lembap dapat menyerap oksigen.'],
+  ['hewan','Serangga seperti belalang bernapas menggunakan …','Trakea','Insang','Paru-paru','Kulit','Trakea adalah saluran udara kecil di tubuh serangga.'],
+  ['hewan','Perubahan bentuk pada katak dan kupu-kupu disebut …','Metamorfosis','Fotosintesis','Adaptasi','Evolusi','Metamorfosis adalah perubahan bentuk hewan dari kecil sampai dewasa.'],
+  ['hewan','Urutan hidup kupu-kupu: telur → ulat → … → kupu-kupu','Kepompong','Berudu','Larva udang','Telur lagi','Ulat membentuk kepompong sebelum menjadi kupu-kupu.'],
+  ['hewan','Anak katak yang hidup di air dan bernapas dengan insang disebut …','Berudu','Ulat','Kepompong','Jentik','Berudu (kecebong) lama-lama tumbuh kaki dan menjadi katak.'],
+  ['tubuh','Organ tubuh yang memompa darah ke seluruh tubuh adalah …','Jantung','Paru-paru','Hati','Ginjal','Jantung berdetak terus-menerus untuk mengalirkan darah.'],
+  ['tubuh','Organ pernapasan utama manusia adalah …','Paru-paru','Jantung','Lambung','Usus','Di paru-paru terjadi pertukaran oksigen dan karbon dioksida.'],
+  ['tubuh','Tulang yang melindungi otak adalah …','Tengkorak','Rusuk','Tulang belakang','Tulang paha','Tengkorak adalah tulang kepala yang keras dan melindungi otak.'],
+  ['tubuh','Indra yang digunakan untuk mengecap rasa adalah …','Lidah','Hidung','Telinga','Kulit','Lidah dapat merasakan manis, asin, asam, dan pahit.'],
+  ['tubuh','Indra untuk mencium bau adalah …','Hidung','Lidah','Mata','Telinga','Hidung adalah indra penciuman.'],
+  ['tubuh','Tulang rusuk berfungsi melindungi …','Jantung dan paru-paru','Otak','Lambung dan usus','Mata','Tulang rusuk membentuk "sangkar" yang melindungi jantung dan paru-paru.'],
+  ['tubuh','Sebelum sampai di lambung, makanan melewati …','Kerongkongan','Paru-paru','Jantung','Ginjal','Jalur makanan: mulut → kerongkongan → lambung → usus halus → usus besar.'],
+  ['tubuh','Pusat pengendali seluruh kegiatan tubuh adalah …','Otak','Jantung','Paru-paru','Ginjal','Otak mengatur gerak, berpikir, dan kerja organ tubuh lainnya.'],
+  ['tubuh','Gas yang kita hirup saat bernapas dan dibutuhkan tubuh adalah …','Oksigen','Karbon dioksida','Nitrogen','Uap air','Tubuh memerlukan oksigen untuk menghasilkan energi.'],
+  ['wujud','Air murni mendidih pada suhu (tekanan udara normal) …','100 °C','50 °C','0 °C','200 °C','Pada tekanan udara normal, air mendidih pada 100 derajat Celsius.'],
+  ['wujud','Air murni membeku pada suhu …','0 °C','10 °C','100 °C','−50 °C','Pada 0 °C, air mulai berubah menjadi es.'],
+  ['wujud','Perubahan wujud dari cair menjadi gas disebut …','Menguap','Membeku','Mencair','Mengembun','Contoh: air yang dipanaskan berubah menjadi uap.'],
+  ['wujud','Perubahan wujud dari padat menjadi cair disebut …','Mencair','Menguap','Membeku','Menyublim','Contoh: es batu yang mencair di suhu ruang.'],
+  ['wujud','Embun di daun pada pagi hari terjadi karena peristiwa …','Mengembun','Menguap','Membeku','Mencair','Uap air di udara yang dingin berubah menjadi titik-titik air.'],
+  ['wujud','Kapur barus di lemari lama-lama habis karena …','Menyublim','Mencair','Menguap','Membeku','Menyublim adalah perubahan wujud padat langsung menjadi gas.'],
+  ['wujud','Air yang dimasukkan ke freezer berubah menjadi es. Peristiwa ini disebut …','Membeku','Mencair','Mengembun','Menguap','Membeku adalah perubahan wujud cair menjadi padat.'],
+  ['wujud','Alat untuk mengukur suhu adalah …','Termometer','Barometer','Penggaris','Timbangan','Termometer menunjukkan suhu benda atau udara.'],
+  ['wujud','Contoh benda cair adalah …','Minyak goreng','Batu','Udara','Kayu','Benda cair bentuknya selalu mengikuti wadahnya.'],
+  ['energi','Benda yang dapat ditarik oleh magnet adalah …','Paku besi','Penghapus karet','Sendok kayu','Botol plastik','Magnet menarik benda yang terbuat dari besi atau baja.'],
+  ['energi','Kutub magnet yang sejenis jika didekatkan akan …','Tolak-menolak','Tarik-menarik','Menempel kuat','Berubah warna','Kutub utara dengan utara, atau selatan dengan selatan, saling menolak.'],
+  ['energi','Kutub magnet yang berbeda jika didekatkan akan …','Tarik-menarik','Tolak-menolak','Diam saja','Berputar','Kutub utara dan kutub selatan saling menarik.'],
+  ['energi','Alat yang memakai magnet untuk menunjukkan arah mata angin adalah …','Kompas','Termometer','Penggaris','Jam','Jarum kompas adalah magnet kecil yang selalu menunjuk arah utara dan selatan.'],
+  ['energi','Sumber energi utama bagi kehidupan di Bumi adalah …','Matahari','Bulan','Angin','Batu bara','Cahaya dan panas Matahari dibutuhkan oleh hampir semua makhluk hidup.'],
+  ['energi','Panel surya mengubah energi … menjadi listrik','Cahaya matahari','Angin','Bunyi','Air','Panel surya menangkap cahaya matahari dan mengubahnya menjadi listrik.'],
+  ['energi','Lampu mengubah energi listrik menjadi energi …','Cahaya','Gerak','Bunyi','Kimia','Lampu menyala karena listrik diubah menjadi cahaya.']
+];
+const INDO = [
+  ['sejarah','Indonesia memproklamasikan kemerdekaan pada tanggal …','17 Agustus 1945','17 Agustus 1950','1 Juni 1945','28 Oktober 1928','Proklamasi dibacakan oleh Soekarno, didampingi Mohammad Hatta, pada 17 Agustus 1945.'],
+  ['sejarah','Presiden pertama Republik Indonesia adalah …','Soekarno','Soeharto','B.J. Habibie','Mohammad Hatta','Soekarno menjadi presiden pertama, didampingi Mohammad Hatta sebagai wakil presiden.'],
+  ['sejarah','Wakil presiden pertama Republik Indonesia adalah …','Mohammad Hatta','Soekarno','Sutan Sjahrir','Adam Malik','Mohammad Hatta juga dikenal sebagai Bapak Koperasi Indonesia.'],
+  ['sejarah','Teks proklamasi dibacakan di …','Jalan Pegangsaan Timur 56, Jakarta','Lapangan Ikada, Jakarta','Gedung Sate, Bandung','Istana Bogor','Proklamasi dibacakan di kediaman Soekarno, Jalan Pegangsaan Timur No. 56, Jakarta.'],
+  ['sejarah','Bendera Merah Putih yang dikibarkan saat proklamasi dijahit oleh …','Fatmawati','R.A. Kartini','Cut Nyak Dien','Dewi Sartika','Fatmawati, istri Soekarno, menjahit bendera pusaka Merah Putih.'],
+  ['sejarah','Sumpah Pemuda diikrarkan pada tanggal …','28 Oktober 1928','17 Agustus 1945','20 Mei 1908','10 November 1945','Sumpah Pemuda diikrarkan pada Kongres Pemuda II, 28 Oktober 1928.'],
+  ['sejarah','Dalam Sumpah Pemuda, bahasa persatuan yang dijunjung adalah …','Bahasa Indonesia','Bahasa Jawa','Bahasa Melayu','Bahasa Inggris','Ikrar ketiga: menjunjung bahasa persatuan, bahasa Indonesia.'],
+  ['sejarah','Pencipta lagu Indonesia Raya adalah …','W.R. Supratman','Ismail Marzuki','C. Simanjuntak','Ibu Sud','Indonesia Raya pertama kali diperdengarkan pada Kongres Pemuda II tahun 1928.'],
+  ['sejarah','Organisasi Budi Utomo berdiri pada tahun …','1908','1928','1945','1912','Budi Utomo berdiri 20 Mei 1908. Tanggal ini diperingati sebagai Hari Kebangkitan Nasional.'],
+  ['pancasila','Lambang negara Indonesia adalah …','Garuda Pancasila','Bendera Merah Putih','Monas','Harimau Sumatra','Garuda Pancasila mencengkeram pita bertuliskan Bhinneka Tunggal Ika.'],
+  ['pancasila','Semboyan bangsa Indonesia adalah …','Bhinneka Tunggal Ika','Gotong Royong','Merdeka atau Mati','Tut Wuri Handayani','Bhinneka Tunggal Ika artinya "berbeda-beda tetapi tetap satu".'],
+  ['pancasila','Pancasila terdiri dari … sila','5','4','6','3','Pancasila berarti lima dasar.'],
+  ['pancasila','"Persatuan Indonesia" adalah bunyi Pancasila sila ke …','3','1','2','5','Sila ketiga: Persatuan Indonesia, berlambang pohon beringin.'],
+  ['pancasila','Lambang sila pertama Pancasila adalah …','Bintang','Rantai','Pohon beringin','Padi dan kapas','Bintang melambangkan sila Ketuhanan Yang Maha Esa.'],
+  ['pancasila','Lambang sila kedua Pancasila adalah …','Rantai','Bintang','Kepala banteng','Pohon beringin','Rantai melambangkan sila Kemanusiaan yang adil dan beradab.'],
+  ['pancasila','Pohon beringin adalah lambang sila ke …','3','1','4','5','Pohon beringin melambangkan sila Persatuan Indonesia.'],
+  ['pancasila','Lambang sila keempat Pancasila adalah …','Kepala banteng','Rantai','Bintang','Padi dan kapas','Kepala banteng melambangkan sila Kerakyatan yang dipimpin oleh hikmat kebijaksanaan dalam permusyawaratan/perwakilan.'],
+  ['pancasila','Padi dan kapas adalah lambang sila ke …','5','4','2','1','Padi dan kapas melambangkan sila Keadilan sosial bagi seluruh rakyat Indonesia.'],
+  ['pancasila','Hari Lahir Pancasila diperingati setiap tanggal …','1 Juni','17 Agustus','1 Oktober','28 Oktober','Hari Lahir Pancasila diperingati setiap 1 Juni.'],
+  ['pancasila','Lagu kebangsaan Indonesia adalah …','Indonesia Raya','Garuda Pancasila','Tanah Airku','Hari Merdeka','Indonesia Raya diciptakan oleh W.R. Supratman.'],
+  ['hari','Hari Pahlawan diperingati setiap tanggal …','10 November','17 Agustus','21 April','2 Mei','Hari Pahlawan mengenang pertempuran Surabaya pada 10 November 1945.'],
+  ['hari','Hari Pendidikan Nasional diperingati setiap tanggal …','2 Mei','21 April','10 November','28 Oktober','2 Mei adalah hari lahir Ki Hajar Dewantara.'],
+  ['hari','Hari Kartini diperingati setiap tanggal …','21 April','2 Mei','22 Desember','1 Juni','R.A. Kartini lahir pada 21 April 1879 dan memperjuangkan pendidikan perempuan.'],
+  ['hari','Hari Batik Nasional diperingati setiap tanggal …','2 Oktober','17 Agustus','28 Oktober','1 Oktober','Pada 2 Oktober 2009, UNESCO menetapkan batik sebagai warisan budaya dari Indonesia.'],
+  ['hari','Hari Guru Nasional diperingati setiap tanggal …','25 November','2 Mei','10 November','21 April','Hari Guru Nasional untuk menghormati jasa para guru.'],
+  ['hari','Hari Sumpah Pemuda diperingati setiap tanggal …','28 Oktober','20 Mei','17 Agustus','1 Juni','Mengenang ikrar para pemuda pada 28 Oktober 1928.'],
+  ['hari','Hari Anak Nasional diperingati setiap tanggal …','23 Juli','1 Juni','2 Mei','25 November','Hari Anak Nasional diperingati setiap 23 Juli.'],
+  ['hari','Tokoh yang dijuluki Bapak Pendidikan Nasional adalah …','Ki Hajar Dewantara','Dr. Soetomo','Pangeran Diponegoro','Mohammad Hatta','Semboyan Ki Hajar Dewantara "Tut Wuri Handayani" dipakai di dunia pendidikan Indonesia.'],
+  ['geografi','Saat ini Indonesia memiliki … provinsi','38','34','33','40','Sejak akhir 2022, Indonesia memiliki 38 provinsi.'],
+  ['geografi','Danau terbesar di Indonesia adalah …','Danau Toba','Danau Maninjau','Danau Sentani','Danau Poso','Danau Toba terletak di Sumatera Utara.'],
+  ['geografi','Gunung tertinggi di Indonesia adalah …','Puncak Jaya','Gunung Semeru','Gunung Rinjani','Gunung Kerinci','Puncak Jaya terletak di Papua.'],
+  ['geografi','Gunung tertinggi di Pulau Jawa adalah …','Gunung Semeru','Gunung Merapi','Gunung Bromo','Gunung Ciremai','Gunung Semeru terletak di Jawa Timur.'],
+  ['geografi','Selat yang memisahkan Pulau Jawa dan Pulau Sumatra adalah …','Selat Sunda','Selat Bali','Selat Malaka','Selat Makassar','Selat Sunda terletak di antara Banten dan Lampung.'],
+  ['geografi','Komodo, kadal terbesar di dunia, hidup di provinsi …','Nusa Tenggara Timur','Bali','Papua','Kalimantan Barat','Komodo hidup di Taman Nasional Komodo, Nusa Tenggara Timur.'],
+  ['geografi','Mata uang Indonesia adalah …','Rupiah','Ringgit','Baht','Peso','Rupiah dikeluarkan oleh Bank Indonesia.'],
+  ['geografi','Indonesia terletak di antara dua benua, yaitu …','Asia dan Australia','Asia dan Eropa','Afrika dan Asia','Amerika dan Australia','Indonesia berada di antara Benua Asia dan Benua Australia.'],
+  ['geografi','Indonesia terletak di antara dua samudra, yaitu …','Hindia dan Pasifik','Atlantik dan Pasifik','Hindia dan Atlantik','Arktik dan Pasifik','Indonesia diapit Samudra Hindia dan Samudra Pasifik.'],
+  ['geografi','Indonesia disebut negara kepulauan karena …','Terdiri dari banyak pulau','Memiliki banyak gunung','Berada di Benua Asia','Memiliki banyak sungai','Indonesia terdiri dari lebih dari 17 ribu pulau.'],
+  ['budaya','Candi Borobudur terletak di provinsi …','Jawa Tengah','Jawa Timur','DI Yogyakarta','Bali','Borobudur berada di Kabupaten Magelang, Jawa Tengah.'],
+  ['budaya','Candi Prambanan adalah candi …','Hindu','Buddha','Kristen','Islam','Prambanan adalah kompleks candi Hindu terbesar di Indonesia.'],
+  ['budaya','Rumah Gadang adalah rumah adat dari …','Sumatera Barat','Jawa Barat','Kalimantan Timur','Bali','Atap Rumah Gadang berbentuk runcing seperti tanduk kerbau, disebut gonjong.'],
+  ['budaya','Rumah adat Tongkonan berasal dari …','Sulawesi Selatan','Papua','Jawa Tengah','Sumatera Utara','Tongkonan adalah rumah adat masyarakat Toraja di Sulawesi Selatan.'],
+  ['budaya','Tari Kecak berasal dari …','Bali','Aceh','Papua','Jawa Tengah','Tari Kecak dimainkan banyak penari pria yang menyerukan "cak-cak-cak".'],
+  ['budaya','Tari Saman berasal dari …','Aceh','Bali','Jawa Barat','Maluku','Tari Saman terkenal dengan gerakan tangan yang cepat dan kompak.'],
+  ['budaya','Kesenian Reog berasal dari …','Jawa Timur','Jawa Barat','Bali','Sumatera Barat','Reog berasal dari Ponorogo, Jawa Timur.'],
+  ['budaya','Angklung adalah alat musik tradisional dari …','Jawa Barat','Sumatera Utara','Maluku','Sulawesi Selatan','Angklung terbuat dari bambu dan dimainkan dengan cara digoyangkan.'],
+  ['budaya','Alat musik Sasando berasal dari …','Nusa Tenggara Timur','Jawa Tengah','Kalimantan Barat','Aceh','Sasando adalah alat musik petik dari Pulau Rote, Nusa Tenggara Timur.']
+];
+
+/* ================== PERAGA INTERAKTIF ================== */
+function mountDots(el, mode) {
+  let a = 3, b = 4;
+  el.innerHTML = `<div class="wg">
+    <label class="rng">Banyak kelompok: <b data-va></b><input type="range" min="1" max="10" value="3" data-a></label>
+    <label class="rng">Isi tiap kelompok: <b data-vb></b><input type="range" min="1" max="10" value="4" data-b></label>
+    <div class="groups" data-g></div><p class="wg-out" data-o></p></div>`;
+  const draw = () => {
+    el.querySelector('[data-va]').textContent = a; el.querySelector('[data-vb]').textContent = b;
+    el.querySelector('[data-g]').innerHTML = Array.from({ length: a }, (_, i) => `<div class="grp g${i % 4}">${'<i></i>'.repeat(b)}</div>`).join('');
+    const t = a * b;
+    el.querySelector('[data-o]').innerHTML = mode === 'kali'
+      ? `${a} × ${b} = ${a <= 5 ? Array(a).fill(b).join(' + ') + ' = ' : ''}<b>${t}</b>`
+      : `${t} benda dibagi rata ke ${a} kelompok, tiap kelompok dapat ${b}.<br><b>${t} : ${a} = ${b}</b>`;
+  };
+  el.querySelector('[data-a]').oninput = e => { a = +e.target.value; draw(); };
+  el.querySelector('[data-b]').oninput = e => { b = +e.target.value; draw(); };
+  draw();
+}
+function mountTable(el) {
+  let n = 7;
+  const draw = () => {
+    el.innerHTML = `<div class="wg"><div class="nums">${[2,3,4,5,6,7,8,9,10].map(x => `<button class="num ${x === n ? 'on' : ''}" data-n="${x}" aria-label="Tabel ${x}">${x}</button>`).join('')}</div>
+      <div class="ttab">${Array.from({ length: 10 }, (_, i) => `<div>${n} × ${i + 1} = <b>${n * (i + 1)}</b></div>`).join('')}</div></div>`;
+    el.querySelectorAll('[data-n]').forEach(btn => btn.onclick = () => { n = +btn.dataset.n; draw(); });
+  };
+  draw();
+}
+function pieSVG(n, d) {
+  let s = '';
+  for (let i = 0; i < d; i++) {
+    const a0 = i / d * 2 * Math.PI - Math.PI / 2, a1 = (i + 1) / d * 2 * Math.PI - Math.PI / 2;
+    const x0 = 60 + 54 * Math.cos(a0), y0 = 60 + 54 * Math.sin(a0), x1 = 60 + 54 * Math.cos(a1), y1 = 60 + 54 * Math.sin(a1);
+    s += `<path d="M60 60 L${x0.toFixed(2)} ${y0.toFixed(2)} A54 54 0 0 1 ${x1.toFixed(2)} ${y1.toFixed(2)} Z" fill="${i < n ? 'var(--math)' : '#ffffff'}" stroke="var(--ink)" stroke-width="2"/>`;
+  }
+  return `<svg viewBox="0 0 120 120" class="pie" role="img" aria-label="Pizza ${n} dari ${d} potong">${s}</svg>`;
+}
+function mountFraction(el) {
+  let n = 3, d = 4;
+  el.innerHTML = `<div class="wg">
+    <label class="rng">Penyebut (dipotong jadi berapa): <b data-vd></b><input type="range" min="2" max="12" value="4" data-d></label>
+    <label class="rng">Pembilang (diambil berapa): <b data-vn></b><input type="range" min="0" max="4" value="3" data-n></label>
+    <div class="pie-wrap" data-p></div><p class="wg-out" data-o></p></div>`;
+  const nIn = el.querySelector('[data-n]');
+  const draw = () => {
+    el.querySelector('[data-vd]').textContent = d; el.querySelector('[data-vn]').textContent = n;
+    el.querySelector('[data-p]').innerHTML = pieSVG(n, d) + `<div class="fbar">${Array.from({ length: d }, (_, i) => `<span class="${i < n ? 'on' : ''}"></span>`).join('')}</div>`;
+    const g = gcd(n, d);
+    let extra = '';
+    if (n === 0) extra = ' Nilainya 0.';
+    else if (n === d) extra = ' Nilainya 1 (satu utuh).';
+    else if (g > 1) extra = ` Bentuk sederhananya ${n / g}/${d / g}.`;
+    el.querySelector('[data-o]').innerHTML = `<b>${n}/${d}</b><br><span class="small">${n} bagian diwarnai dari ${d} bagian yang sama besar.${extra}</span>`;
+  };
+  el.querySelector('[data-d]').oninput = e => { d = +e.target.value; nIn.max = d; if (n > d) n = d; nIn.value = n; draw(); };
+  nIn.oninput = e => { n = +e.target.value; draw(); };
+  draw();
+}
+const COL_ADD = { op:'+', bot:['2','8','5'],
+  init:{ hl:-1, carry:['','',''], top:['4','6','7'], res:['','',''], text:'Tekan tombol di bawah. Kita mulai dari kanan, yaitu satuan.' },
+  steps:[
+    { hl:2, carry:['','1',''], top:['4','6','7'], res:['','','2'], text:'Satuan: 7 + 5 = 12. Tulis 2, simpan 1 di atas kolom puluhan.' },
+    { hl:1, carry:['1','1',''], top:['4','6','7'], res:['','5','2'], text:'Puluhan: 6 + 8 + 1 (simpanan) = 15. Tulis 5, simpan 1 di atas kolom ratusan.' },
+    { hl:0, carry:['1','1',''], top:['4','6','7'], res:['7','5','2'], text:'Ratusan: 4 + 2 + 1 (simpanan) = 7. Tulis 7.' },
+    { hl:-1, carry:['1','1',''], top:['4','6','7'], res:['7','5','2'], text:'Selesai! 467 + 285 = 752 🎉' }
+  ] };
+const B = (old, now) => ({ old, now });
+const COL_SUB = { op:'−', bot:['2','7','8'],
+  init:{ hl:-1, top:['5','3','2'], res:['','',''], text:'Tekan tombol di bawah. Mulai dari kanan, yaitu satuan.' },
+  steps:[
+    { hl:2, top:['5', B('3','2'), B('2','12')], res:['','','4'], text:'Satuan: 2 − 8 tidak bisa. Pinjam 1 dari puluhan, jadi 12 − 8 = 4. Puluhan tinggal 2.' },
+    { hl:1, top:[B('5','4'), B('3','12'), B('2','12')], res:['','5','4'], text:'Puluhan: 2 − 7 tidak bisa. Pinjam 1 dari ratusan, jadi 12 − 7 = 5. Ratusan tinggal 4.' },
+    { hl:0, top:[B('5','4'), B('3','12'), B('2','12')], res:['2','5','4'], text:'Ratusan: 4 − 2 = 2. Tulis 2.' },
+    { hl:-1, top:[B('5','4'), B('3','12'), B('2','12')], res:['2','5','4'], text:'Selesai! 532 − 278 = 254 🎉' }
+  ] };
+function mountColumn(el, data) {
+  let step = -1;
+  const render = () => {
+    const st = step < 0 ? data.init : data.steps[step];
+    const cls = i => st.hl === i ? ' hl' : '';
+    const topCell = (v, i) => typeof v === 'object' ? `<span class="c${cls(i)}"><span><s>${v.old}</s><em>${v.now}</em></span></span>` : `<span class="c${cls(i)}">${v}</span>`;
+    el.innerHTML = `<div class="wg col-wrap"><div class="col-grid" aria-label="Hitungan bersusun">
+      <span class="c op"></span>${[0,1,2].map(i => `<span class="c carry">${(st.carry || [])[i] || ''}</span>`).join('')}
+      <span class="c op"></span>${[0,1,2].map(i => topCell(st.top[i], i)).join('')}
+      <span class="c op">${data.op}</span>${[0,1,2].map(i => `<span class="c${cls(i)}">${data.bot[i]}</span>`).join('')}
+      <span class="line"></span>
+      <span class="c op"></span>${[0,1,2].map(i => `<span class="c res${cls(i)}">${st.res[i]}</span>`).join('')}
+    </div><p class="col-text">${st.text}</p>
+    <button class="btn btn-ghost btn-sm full" data-colnext>${step >= data.steps.length - 1 ? '↺ Ulangi dari awal' : 'Langkah berikutnya →'}</button></div>`;
+    el.querySelector('[data-colnext]').onclick = () => { step = step >= data.steps.length - 1 ? -1 : step + 1; render(); };
+  };
+  render();
+}
+function mountVocab(el, cat) {
+  el.innerHTML = `<div class="vgrid">${VOCAB[cat].map(([id, en, em]) => `<div class="vc ${em ? '' : 'noem'}">${em ? `<span class="vem" aria-hidden="true">${em}</span>` : ''}<b>${en}</b><small>${id}</small>${CAN_SPEAK ? `<button class="spk" data-say="${en}" aria-label="Dengarkan ${en}">🔊</button>` : ''}</div>`).join('')}</div>`;
+}
+const PLANETS = [['Merkurius','#a9a49b',14],['Venus','#e8c27a',20],['Bumi','#4a8fe0',21],['Mars','#d0623c',17],['Jupiter','#d9a066',46],['Saturnus','#e3c88a',38],['Uranus','#8fd3e0',28],['Neptunus','#4f6fe0',27]];
+function mountPlanets(el) {
+  el.innerHTML = `<div class="wg"><div class="planets"><div class="sun" aria-label="Matahari"></div>${PLANETS.map((p, i) => `<div class="pl"><span class="orb${p[0] === 'Saturnus' ? ' ring' : ''}" style="width:${p[2]}px;height:${p[2]}px;background:${p[1]}"></span><b>${i + 1}. ${p[0]}</b></div>`).join('')}</div><p class="small muted" style="text-align:center">Ukuran planet di sini hanya perkiraan, bukan skala sebenarnya.</p></div>`;
+}
+const BULAN = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+const HARI = [[4,21,'Hari Kartini','Mengenang R.A. Kartini, pejuang pendidikan perempuan.'],[5,2,'Hari Pendidikan Nasional','Hari lahir Ki Hajar Dewantara.'],[5,20,'Hari Kebangkitan Nasional','Berdirinya Budi Utomo tahun 1908.'],[6,1,'Hari Lahir Pancasila','Diperingati setiap 1 Juni.'],[7,23,'Hari Anak Nasional','Hari untuk anak-anak Indonesia.'],[8,17,'Hari Kemerdekaan','Proklamasi kemerdekaan tahun 1945.'],[10,2,'Hari Batik Nasional','Batik diakui UNESCO tahun 2009.'],[10,28,'Hari Sumpah Pemuda','Ikrar para pemuda tahun 1928.'],[11,10,'Hari Pahlawan','Mengenang pertempuran Surabaya tahun 1945.'],[11,25,'Hari Guru Nasional','Menghormati jasa para guru.']];
+function mountHari(el) {
+  const now = new Date(), m = now.getMonth() + 1, d = now.getDate();
+  el.innerHTML = `<div class="hari">${HARI.map(([mm, dd, n, k]) => { const today = mm === m && dd === d;
+    return `<div class="hr ${today ? 'today' : ''}"><span class="hd"><b>${dd}</b>${BULAN[mm - 1]}</span><div><b>${n}${today ? ' · Hari ini!' : ''}</b><small>${k}</small></div></div>`; }).join('')}</div>`;
+}
+function mountWidget(el, w) {
+  el.innerHTML = '';
+  if (!w) return;
+  if (w === 'kali' || w === 'bagi') return mountDots(el, w);
+  if (w === 'kaliTable') return mountTable(el);
+  if (w === 'pecahan') return mountFraction(el);
+  if (w === 'addCol') return mountColumn(el, COL_ADD);
+  if (w === 'subCol') return mountColumn(el, COL_SUB);
+  if (w === 'planets') return mountPlanets(el);
+  if (w === 'hari') return mountHari(el);
+  if (w.startsWith('vocab:')) return mountVocab(el, w.slice(6));
+}
+
+/* ================== MATERI ================== */
+const vocabLesson = (cat, title) => [
+  { t:`Kosakata: ${title}`, h:`<p>Baca kata-kata ini${CAN_SPEAK ? ', lalu ketuk 🔊 untuk mendengar cara mengucapkannya' : ''}. Coba ucapkan keras-keras sampai lancar.</p>`, w:`vocab:${cat}` },
+  { t:'Pakai dalam kalimat', h:`<p>Kata baru lebih cepat diingat kalau langsung dipakai dalam kalimat.</p>${sent(SENTENCES[cat])}${tip('💡 Tempelkan kertas kecil bertuliskan kata bahasa Inggris pada benda di rumah, misalnya "door" di pintu. Setiap lewat, ucapkan kata itu.')}` }
+];
+const TOPICS = {
+  math: [
+    { id:'kali', em:'✖️', name:'Perkalian', desc:'Penjumlahan berulang', free:true, lesson:[
+      { t:'Perkalian = penjumlahan berulang', h:`<p><b>3 × 4</b> artinya ada <b>3 kelompok</b>, dan setiap kelompok berisi <b>4</b> benda.</p><p class="big-eq">3 × 4 = 4 + 4 + 4 = 12</p><p>Geser tombol di bawah untuk mencoba sendiri.</p>`, w:'kali' },
+      { t:'Perkalian boleh dibalik', h:`<p>Hasil perkalian tetap sama walaupun urutan angkanya ditukar.</p><p class="big-eq">3 × 4 = 4 × 3 = 12</p>${tip('💡 Lupa hasil 7 × 3? Hitung saja 3 × 7 yang lebih mudah: 7 + 7 + 7 = 21.')}` },
+      { t:'Jurus cepat perkalian', h: tbl([['× 1','Hasilnya angka itu sendiri','8 × 1 = 8'],['× 2','Gandakan angkanya','7 × 2 = 7 + 7 = 14'],['× 10','Tambahkan 0 di belakang','6 × 10 = 60'],['× 5','Setengah dari × 10','8 × 5 = 80 : 2 = 40'],['× 9','× 10 lalu kurangi angkanya','9 × 7 = 70 − 7 = 63']]) },
+      { t:'Tabel perkalian', h:`<p>Pilih angka untuk melihat tabelnya. Hafalkan sedikit demi sedikit, satu tabel setiap hari.</p>`, w:'kaliTable' }
+    ] },
+    { id:'bagi', em:'➗', name:'Pembagian', desc:'Membagi sama rata', lesson:[
+      { t:'Membagi sama rata', h:`<p><b>12 : 3</b> artinya 12 benda dibagi rata ke <b>3 kelompok</b>. Setiap kelompok mendapat <b>4</b>.</p><p>Geser tombol untuk mencoba pembagian lain.</p>`, w:'bagi' },
+      { t:'Pembagian adalah kebalikan perkalian', h:`<p class="big-eq">3 × 4 = 12</p><p style="text-align:center">maka</p><p class="big-eq">12 : 3 = 4 &nbsp;dan&nbsp; 12 : 4 = 3</p>${tip('💡 Untuk menghitung 56 : 7, tanyakan: "7 kali berapa yang hasilnya 56?" Jawabannya 8, karena 7 × 8 = 56.')}` },
+      { t:'Aturan penting pembagian', h: tbl([['Dibagi 1','Hasilnya angka itu sendiri','9 : 1 = 9'],['Dibagi dirinya sendiri','Hasilnya 1','9 : 9 = 1'],['0 dibagi angka lain','Hasilnya 0','0 : 5 = 0'],['Dibagi 0','Tidak bisa dihitung','5 : 0 = ❌']]) }
+    ] },
+    { id:'campur', em:'➕', name:'Tambah & Kurang', desc:'Bersusun, bilangan ratusan', lesson:[
+      { t:'Kenali nilai tempat', h:`<p>Setiap angka punya tempat: <b>ratusan</b>, <b>puluhan</b>, dan <b>satuan</b>. Contohnya 467:</p><div class="pv"><div><b>4</b><small>ratusan</small><span>400</span></div><div><b>6</b><small>puluhan</small><span>60</span></div><div><b>7</b><small>satuan</small><span>7</span></div></div>${tip('💡 Saat menghitung bersusun, selalu mulai dari kanan, yaitu dari satuan.')}` },
+      { t:'Penjumlahan bersusun', h:`<p>Kalau hasil satu kolom 10 atau lebih, tulis satuannya lalu <b>simpan</b> 1 di kolom sebelah kiri.</p>`, w:'addCol' },
+      { t:'Pengurangan bersusun', h:`<p>Kalau angka atas lebih kecil, <b>pinjam</b> 1 dari kolom sebelah kiri. Satu puluhan sama dengan 10 satuan.</p>`, w:'subCol' },
+      { t:'Cek jawabanmu', h:`<p>Hasil pengurangan bisa dicek dengan penjumlahan.</p><p class="big-eq">532 − 278 = 254</p><p class="big-eq">254 + 278 = 532 ✓</p>${tip('💡 Kalau hasil ceknya sama dengan angka awal, berarti jawabanmu benar.')}` }
+    ] },
+    { id:'pecahan', em:'🍕', name:'Pecahan', desc:'Mengenal, menyederhanakan, membandingkan', lesson:[
+      { t:'Apa itu pecahan?', h:`<p>Pecahan menunjukkan <b>bagian dari keseluruhan</b> yang dibagi sama besar.</p><p><b>Penyebut</b> (angka bawah) = dipotong menjadi berapa bagian.<br><b>Pembilang</b> (angka atas) = berapa bagian yang diambil.</p><p>Geser tombol untuk memotong pizza.</p>`, w:'pecahan' },
+      { t:'Pecahan senilai', h:`<p>Pecahan yang bentuknya berbeda tetapi besarnya sama disebut <b>pecahan senilai</b>.</p><p class="big-eq">1/2 = 2/4 = 3/6 = 4/8</p>${tip('💡 Kalikan pembilang dan penyebut dengan angka yang sama. Contoh: 1/2, keduanya dikali 3 → 3/6.')}` },
+      { t:'Menyederhanakan pecahan', h:`<p>Bagi pembilang dan penyebut dengan angka yang sama, sampai tidak bisa dibagi lagi.</p><div class="steps"><div>6/8 → keduanya dibagi 2 → 3/4</div><div>12/18 → keduanya dibagi 6 → 2/3</div><div>10/15 → keduanya dibagi 5 → 2/3</div></div>${tip('💡 Bagi dengan angka terbesar yang bisa membagi keduanya (FPB), supaya selesai dalam satu langkah.')}` },
+      { t:'Membandingkan pecahan', h:`<p><b>Penyebut sama:</b> lihat pembilangnya. Pembilang lebih besar, pecahan lebih besar.</p><p class="big-eq">5/8 &gt; 3/8</p><p><b>Pembilang sama:</b> lihat penyebutnya. Penyebut lebih kecil artinya potongannya lebih besar.</p><p class="big-eq">1/3 &gt; 1/5</p>` }
+    ] },
+    { id:'cerita', em:'📖', name:'Soal Cerita', desc:'Uang, waktu, dan sehari-hari', lesson:[
+      { t:'4 langkah jitu', h:`<ol class="li"><li><b>Baca</b> soal pelan-pelan sampai paham ceritanya.</li><li>Tulis yang <b>diketahui</b> dan yang <b>ditanyakan</b>.</li><li>Pilih <b>operasi hitung</b> yang tepat.</li><li><b>Hitung</b>, lalu periksa lagi jawabanmu.</li></ol>` },
+      { t:'Kata kunci operasi hitung', h: tbl([['+','"lagi", "jumlah", "semuanya", "ditambah"'],['−','"diberikan", "dimakan", "hilang", "sisa"'],['×','"setiap", "tiap", "masing-masing berisi"'],[':','"dibagi rata", "sama banyak"']]) },
+      { t:'Contoh soal', h:`<div class="ex"><p><b>Rani punya 4 kotak pensil. Setiap kotak berisi 8 pensil. Berapa jumlah pensil Rani?</b></p></div><div class="steps"><div>Diketahui: 4 kotak, setiap kotak 8 pensil</div><div>Ditanya: jumlah semua pensil</div><div>Kata kunci "setiap" → perkalian</div><div>4 × 8 = 32. Jawaban: 32 pensil ✓</div></div>` },
+      { t:'Soal waktu dan uang', h:`<p class="big-eq">1 jam = 60 menit</p><div class="ex"><p><b>Film mulai pukul 13.15 dan berlangsung 90 menit.</b></p><p>90 menit = 1 jam 30 menit<br>13.15 + 1 jam = 14.15<br>14.15 + 30 menit = <b>14.45</b></p></div><div class="ex"><p><b>Beli 3 buku, harga satu buku Rp2.500.</b></p><p>3 × Rp2.500 = <b>Rp7.500</b></p></div>` }
+    ] },
+    { id:'kilat', em:'⚡', name:'Tantangan 60 Detik', desc:'Campuran, jawab secepatnya!', timed:true }
+  ],
+  eng: [
+    { id:'hewan', em:'🐾', name:'Hewan', desc:'Animals', lesson: null },
+    { id:'makanan', em:'🍎', name:'Buah & Makanan', desc:'Fruits and food', lesson: null },
+    { id:'benda', em:'🎒', name:'Benda & Kendaraan', desc:'Things and vehicles', lesson: null },
+    { id:'alam', em:'🌤️', name:'Alam & Cuaca', desc:'Nature and weather', lesson: null },
+    { id:'sifat', em:'🎨', name:'Warna & Sifat', desc:'Colors and adjectives', lesson: null },
+    { id:'kerja', em:'🏃', name:'Kata Kerja', desc:'Action words', lesson: null },
+    { id:'aan', em:'🔠', name:'a dan an', desc:'Kata sandang', lesson:[
+      { t:'Kapan pakai "a" dan "an"?', h:`<p>"a" dan "an" artinya <b>sebuah</b> atau <b>seekor</b>, dipakai untuk satu benda.</p>${tbl([['an','Sebelum kata yang diawali bunyi vokal (a, i, u, e, o)','an apple, an egg, an elephant, an orange, an umbrella'],['a','Sebelum kata yang diawali bunyi konsonan','a cat, a book, a ball, a car']])}` },
+      { t:'Contoh dalam kalimat', h: sent([['I eat an apple.','Saya makan sebuah apel.'],['She has a cat.','Dia punya seekor kucing.'],['It is an elephant.','Itu seekor gajah.'],['This is a book.','Ini sebuah buku.']]) }
+    ] }
+  ],
+  sains: [
+    { id:'tata', em:'🪐', name:'Tata Surya', desc:'Matahari, planet, dan Bulan', lesson:[
+      { t:'Keluarga Matahari', h:`<p>Tata surya terdiri dari <b>Matahari</b> sebagai pusatnya, dan benda-benda langit yang beredar mengelilinginya, termasuk <b>8 planet</b>.</p><p>Geser ke samping untuk melihat urutan planet dari yang paling dekat dengan Matahari.</p>`, w:'planets' },
+      { t:'Kenalan dengan 8 planet', h: tbl([['1. Merkurius','Paling dekat dengan Matahari dan paling kecil'],['2. Venus','Planet paling panas'],['3. Bumi','Satu-satunya planet yang diketahui ada kehidupan'],['4. Mars','Dijuluki planet merah'],['5. Jupiter','Planet terbesar'],['6. Saturnus','Punya cincin besar yang indah'],['7. Uranus','Berputar dalam posisi miring'],['8. Neptunus','Paling jauh dari Matahari']]) },
+      { t:'Rotasi dan revolusi', h:`<div class="two"><div class="box"><b>🔄 Rotasi</b><p>Bumi berputar pada porosnya. Satu putaran sekitar <b>24 jam</b>. Akibatnya ada <b>siang dan malam</b>.</p></div><div class="box"><b>☀️ Revolusi</b><p>Bumi beredar mengelilingi Matahari. Satu putaran sekitar <b>365 hari</b>, atau satu tahun.</p></div></div>${tip('🌙 Bulan adalah satelit alami Bumi. Bulan beredar mengelilingi Bumi.')}` }
+    ] },
+    { id:'tumbuhan', em:'🌱', name:'Tumbuhan', desc:'Bagian tumbuhan dan fotosintesis', lesson:[
+      { t:'Bagian tumbuhan dan tugasnya', h: tbl([['🌱 Akar','Menyerap air dan zat hara dari tanah, menopang tumbuhan'],['🪵 Batang','Mengangkut air dan makanan, menopang tumbuhan'],['🍃 Daun','Tempat utama fotosintesis (membuat makanan)'],['🌸 Bunga','Alat perkembangbiakan, menghasilkan buah dan biji']]) },
+      { t:'Fotosintesis: dapur tumbuhan', h:`<p>Tumbuhan membuat makanannya sendiri. Proses ini disebut <b>fotosintesis</b> dan terjadi terutama di daun.</p><div class="eq"><span>💧 Air</span><i>+</i><span>💨 Karbon dioksida</span><i>+</i><span>☀️ Cahaya</span><i>→</i><span>🍬 Makanan (gula)</span><i>+</i><span>🫧 Oksigen</span></div>${tip('💡 Daun berwarna hijau karena mengandung <b>klorofil</b> (zat hijau daun) yang menangkap cahaya matahari.')}` },
+      { t:'Kenapa tumbuhan penting?', h:`<ul class="li"><li>Oksigen hasil fotosintesis kita hirup saat bernapas.</li><li>Tumbuhan menjadi sumber makanan bagi hewan dan manusia.</li><li>Akar tumbuhan menahan tanah supaya tidak mudah longsor.</li></ul>` }
+    ] },
+    { id:'hewan', em:'🦋', name:'Hewan', desc:'Makanan, pernapasan, metamorfosis', lesson:[
+      { t:'Hewan berdasarkan makanannya', h: tbl([['🐄 Herbivora','Pemakan tumbuhan','Sapi, kambing, kelinci'],['🐯 Karnivora','Pemakan daging','Harimau, singa, elang'],['🐔 Omnivora','Pemakan tumbuhan dan daging','Ayam, beruang, tikus']]) },
+      { t:'Alat pernapasan hewan', h: tbl([['🐟 Ikan','Insang'],['🪱 Cacing tanah','Kulit yang lembap'],['🦗 Serangga','Trakea'],['🐦 Burung, mamalia, reptil','Paru-paru'],['🐸 Katak','Berudu: insang. Dewasa: paru-paru dan kulit']]) },
+      { t:'Metamorfosis', h:`<p>Metamorfosis adalah perubahan bentuk hewan dari kecil sampai dewasa.</p><p><b>Kupu-kupu</b></p>${chain(['🥚 Telur','🐛 Ulat','Kepompong','🦋 Kupu-kupu'])}<p><b>Katak</b></p>${chain(['🥚 Telur','Berudu','Katak muda','🐸 Katak'])}` }
+    ] },
+    { id:'tubuh', em:'🫀', name:'Tubuh Manusia', desc:'Organ, rangka, panca indra', lesson:[
+      { t:'Organ penting tubuh', h: tbl([['🧠 Otak','Pusat pengendali seluruh kegiatan tubuh'],['🫀 Jantung','Memompa darah ke seluruh tubuh'],['🫁 Paru-paru','Tempat pertukaran oksigen dan karbon dioksida'],['Lambung','Mencerna makanan'],['Ginjal','Menyaring darah dan membuang sisa sebagai urine']]) },
+      { t:'Rangka pelindung', h:`${tbl([['💀 Tengkorak','Melindungi otak'],['Tulang rusuk','Melindungi jantung dan paru-paru'],['Tulang belakang','Menopang tubuh supaya bisa tegak']])}${tip('🍽️ Jalur makanan: mulut → kerongkongan → lambung → usus halus → usus besar.')}` },
+      { t:'Panca indra', h: tbl([['👀 Mata','Penglihatan'],['👂 Telinga','Pendengaran'],['👃 Hidung','Penciuman'],['👅 Lidah','Pengecap (rasa)'],['✋ Kulit','Peraba']]) }
+    ] },
+    { id:'wujud', em:'🧊', name:'Wujud Benda & Suhu', desc:'Padat, cair, gas', lesson:[
+      { t:'Tiga wujud benda', h: tbl([['🪨 Padat','Bentuk dan ukurannya tetap','Batu, es, kayu'],['💧 Cair','Bentuknya mengikuti wadah','Air, minyak, susu'],['💨 Gas','Mengisi seluruh ruangan','Udara, uap air']]) },
+      { t:'Perubahan wujud', h: tbl([['Mencair','Padat → cair','Es batu mencair'],['Membeku','Cair → padat','Air menjadi es di freezer'],['Menguap','Cair → gas','Air mendidih menjadi uap'],['Mengembun','Gas → cair','Embun di daun pada pagi hari'],['Menyublim','Padat → gas','Kapur barus lama-lama habis'],['Mengkristal','Gas → padat','Terbentuknya salju di awan']]) },
+      { t:'Suhu', h:`<p>Suhu diukur dengan <b>termometer</b>, satuannya derajat Celsius (°C).</p>${tbl([['🔥 100 °C','Air mendidih'],['🧊 0 °C','Air membeku'],['🌡️ 36–37 °C','Suhu tubuh manusia yang normal']])}<p class="small muted">Suhu didih dan beku air di atas berlaku pada tekanan udara normal.</p>` }
+    ] },
+    { id:'energi', em:'🧲', name:'Magnet & Energi', desc:'Kutub magnet, perubahan energi', lesson:[
+      { t:'Magnet', h:`<p>Magnet dapat menarik benda yang terbuat dari <b>besi</b> atau <b>baja</b>.</p><div class="two"><div class="box"><b>✅ Ditarik magnet</b><p>Paku, peniti, klip besi, jarum</p></div><div class="box"><b>❌ Tidak ditarik</b><p>Kayu, plastik, karet, kertas, kaca</p></div></div>` },
+      { t:'Kutub magnet', h:`<p>Setiap magnet punya dua kutub: <b>utara (U)</b> dan <b>selatan (S)</b>.</p>${tbl([['U dan U, atau S dan S','Sejenis: tolak-menolak'],['U dan S','Berbeda: tarik-menarik']])}${tip('🧭 Kompas memakai jarum magnet yang selalu menunjuk arah utara dan selatan.')}` },
+      { t:'Energi di sekitar kita', h:`<p><b>Matahari</b> adalah sumber energi utama bagi kehidupan di Bumi. Energi bisa berubah bentuk:</p>${tbl([['💡 Lampu','Listrik → cahaya'],['Setrika','Listrik → panas'],['Kipas angin','Listrik → gerak'],['📻 Radio','Listrik → bunyi'],['Panel surya','Cahaya matahari → listrik']])}` }
+    ] }
+  ],
+  indo: [
+    { id:'sejarah', em:'📜', name:'Sejarah Kemerdekaan', desc:'Dari 1908 sampai 1945', lesson:[
+      { t:'Jalan menuju merdeka', h:`<div class="timeline">${[['20 Mei 1908','Berdirinya Budi Utomo, awal kebangkitan nasional'],['28 Oktober 1928','Para pemuda mengikrarkan Sumpah Pemuda'],['17 Agustus 1945','Proklamasi kemerdekaan Indonesia'],['18 Agustus 1945','UUD 1945 disahkan. Soekarno dan Mohammad Hatta dipilih menjadi presiden dan wakil presiden']].map(([a, b]) => `<div class="tl"><b>${a}</b><p>${b}</p></div>`).join('')}</div>` },
+      { t:'Sumpah Pemuda', h:`<p>Pada Kongres Pemuda II, 28 Oktober 1928, para pemuda berikrar:</p><ol class="li"><li>Bertumpah darah yang satu, <b>tanah air Indonesia</b>.</li><li>Berbangsa yang satu, <b>bangsa Indonesia</b>.</li><li>Menjunjung bahasa persatuan, <b>bahasa Indonesia</b>.</li></ol>${tip('🎵 Di kongres ini, lagu <b>Indonesia Raya</b> karya W.R. Supratman pertama kali diperdengarkan.')}` },
+      { t:'Proklamasi kemerdekaan', h:`<p>Teks proklamasi dibacakan oleh <b>Soekarno</b>, didampingi <b>Mohammad Hatta</b>, pada <b>17 Agustus 1945</b> di Jalan Pegangsaan Timur No. 56, Jakarta.</p>${tip('🇮🇩 Bendera Merah Putih yang dikibarkan saat proklamasi dijahit oleh <b>Fatmawati</b>.')}` }
+    ] },
+    { id:'pancasila', em:'🦅', name:'Pancasila & Lambang Negara', desc:'Lima sila dan Garuda', lesson:[
+      { t:'Lima sila dan lambangnya', h: tbl([['⭐ Sila 1','Ketuhanan Yang Maha Esa','Bintang'],['⛓️ Sila 2','Kemanusiaan yang adil dan beradab','Rantai'],['🌳 Sila 3','Persatuan Indonesia','Pohon beringin'],['🐂 Sila 4','Kerakyatan yang dipimpin oleh hikmat kebijaksanaan dalam permusyawaratan/perwakilan','Kepala banteng'],['🌾 Sila 5','Keadilan sosial bagi seluruh rakyat Indonesia','Padi dan kapas']]) },
+      { t:'Garuda Pancasila', h:`<p><b>Garuda Pancasila</b> adalah lambang negara Indonesia. Di dadanya ada perisai berisi lima lambang sila.</p><p>Cakarnya mencengkeram pita bertuliskan <b>Bhinneka Tunggal Ika</b>, artinya "berbeda-beda tetapi tetap satu".</p>${tip('🪶 Jumlah bulu Garuda melambangkan tanggal kemerdekaan: 17 bulu di tiap sayap, 8 bulu ekor, 19 bulu pangkal ekor, dan 45 bulu leher → 17-8-1945.')}` },
+      { t:'Pancasila sehari-hari', h:`${tbl([['Sila 1','Berdoa sebelum belajar dan menghormati teman yang berbeda agama'],['Sila 2','Menolong teman yang sedang kesulitan'],['Sila 3','Bermain bersama tanpa membeda-bedakan suku'],['Sila 4','Memilih ketua kelas dengan musyawarah'],['Sila 5','Berbagi dengan adil dan tidak serakah']])}${tip('📅 Hari Lahir Pancasila diperingati setiap 1 Juni.')}` }
+    ] },
+    { id:'hari', em:'📅', name:'Hari Nasional', desc:'Tanggal penting dan tokohnya', lesson:[
+      { t:'Kalender hari nasional', h:`<p>Hari-hari penting yang diperingati bangsa Indonesia:</p>`, w:'hari' },
+      { t:'Tokoh di balik hari nasional', h: tbl([['R.A. Kartini','Memperjuangkan pendidikan bagi perempuan · 21 April'],['Ki Hajar Dewantara','Bapak Pendidikan Nasional, semboyannya "Tut Wuri Handayani" · 2 Mei'],['Pejuang Surabaya','Bertempur mempertahankan kemerdekaan pada 10 November 1945 · Hari Pahlawan']]) }
+    ] },
+    { id:'geografi', em:'🗺️', name:'Geografi Indonesia', desc:'Pulau, gunung, danau, letak', lesson:[
+      { t:'Negara kepulauan', h:`<p>Indonesia adalah <b>negara kepulauan</b> dengan lebih dari 17 ribu pulau dan <b>38 provinsi</b>.</p><p>Lima pulau besar: <b>Sumatra, Jawa, Kalimantan, Sulawesi, dan Papua</b>.</p>${tip('🌏 Indonesia terletak di antara dua benua (<b>Asia</b> dan <b>Australia</b>) dan dua samudra (<b>Hindia</b> dan <b>Pasifik</b>). Mata uangnya <b>Rupiah</b>.')}` },
+      { t:'Rekor alam Indonesia', h: tbl([['🏞️ Danau Toba','Danau terbesar di Indonesia · Sumatera Utara'],['🏔️ Puncak Jaya','Gunung tertinggi di Indonesia · Papua'],['🌋 Semeru','Gunung tertinggi di Pulau Jawa · Jawa Timur'],['🌊 Selat Sunda','Memisahkan Pulau Jawa dan Sumatra'],['🦎 Komodo','Kadal terbesar di dunia · Nusa Tenggara Timur']]) }
+    ] },
+    { id:'budaya', em:'🎭', name:'Budaya Nusantara', desc:'Rumah adat, tarian, alat musik', lesson:[
+      { t:'Rumah adat', h: tbl([['🏠 Rumah Gadang','Sumatera Barat'],['🏠 Joglo','Jawa Tengah'],['🏠 Tongkonan','Sulawesi Selatan (Toraja)'],['🏠 Honai','Papua']]) },
+      { t:'Tarian dan alat musik', h: tbl([['💃 Tari Saman','Aceh'],['💃 Tari Kecak','Bali'],['💃 Reog','Ponorogo, Jawa Timur'],['💃 Tari Jaipong','Jawa Barat'],['🎵 Angklung','Jawa Barat'],['🎵 Sasando','Nusa Tenggara Timur'],['🎵 Kolintang','Sulawesi Utara']]) },
+      { t:'Candi dan batik', h:`${tbl([['Borobudur','Candi Buddha · Magelang, Jawa Tengah'],['Prambanan','Candi Hindu · perbatasan Yogyakarta dan Jawa Tengah']])}${tip('👘 Batik ditetapkan UNESCO sebagai warisan budaya dari Indonesia pada 2 Oktober 2009. Tanggal ini diperingati sebagai Hari Batik Nasional.')}` }
+    ] }
+  ]
+};
+TOPICS.eng.forEach(t => { if (t.id !== 'aan') { t.lesson = vocabLesson(t.id, t.name); t.desc = `${t.desc} · ${VOCAB[t.id].length} kata`; } });
+
+/* ================== DATA MAPEL ================== */
+const SUBJECTS = {
+  math:  { name:'Matematika', em:'🧮', cls:'s-math', color:'var(--math)' },
+  eng:   { name:'Bahasa Inggris', em:'🔤', cls:'s-eng', color:'var(--eng)' },
+  sains: { name:'Sains', em:'🔬', cls:'s-sains', color:'var(--sains)' },
+  indo:  { name:'Pengetahuan Indonesia', em:'🗺️', cls:'s-indo', color:'var(--indo)' }
+};
+const BADGES = [
+  { id:'first', em:'🎉', name:'Langkah Pertama' },
+  { id:'scholar', em:'📖', name:'5 Materi Selesai' },
+  { id:'perfect', em:'💯', name:'Nilai Sempurna' },
+  { id:'streak5', em:'🔥', name:'5 Benar Beruntun' },
+  { id:'math50', em:'🧮', name:'50 Soal Matematika' },
+  { id:'explorer', em:'🧭', name:'Penjelajah Ilmu' },
+  { id:'speed', em:'⚡', name:'Kilat 15+' }
+];
+const AVATARS = ['🦁','🐯','🐼','🦊','🐸','🐵','🦄','🐙','🐨','🐧','🦖','🚀'];
+const TITLES = ['Pemula','Penjelajah','Jagoan','Bintang Kelas','Juara','Super Juara'];
+const full = () => D.access === 'full';
+const level = () => Math.floor(D.xp / 150) + 1;
+const tKey = (s, t) => `${s}.${t}`;
+const tData = (s, t) => D.topics[tKey(s, t)] || { learned:false, best:0 };
+const topicOf = (s, t) => TOPICS[s].find(x => x.id === t);
+const unlocked = (s, t) => full() || (s === 'math' && topicOf(s, t).free);
+const learnedCount = () => Object.values(D.topics).filter(x => x.learned).length;
+const lessonCount = () => Object.values(TOPICS).flat().filter(t => t.lesson).length;
+function giveBadge(id) { if (!D.badges.includes(id)) { D.badges.push(id); return true; } return false; }
+
+/* ================== NAVIGASI ================== */
+let CUR = { subj:'math', topic:'kali' };
+function show(id) {
+  document.querySelectorAll('.screen').forEach(s => s.hidden = s.id !== 's-' + id);
+  window.scrollTo(0, 0);
+  if (id === 'home') renderHome();
+  if (id === 'subject') renderSubject();
+  if (id === 'report') renderReport();
+}
+document.addEventListener('click', e => { const b = e.target.closest('[data-back]'); if (b) show(b.dataset.back); });
+['#buyLink1', '#buyLink2', '#buyLink3'].forEach(s => $(s).href = CONFIG.BUY_URL);
+
+/* ---------- gerbang kode ---------- */
+$('#gateForm').addEventListener('submit', e => {
+  e.preventDefault();
+  const c = $('#code').value.trim().toUpperCase();
+  if (!c) { $('#codeErr').textContent = 'Masukkan kode akses dulu, ya.'; return; }
+  if (!CONFIG.CODES.includes(c)) { $('#codeErr').textContent = 'Kode tidak cocok. Periksa lagi kode aksesmu.'; return; }
+  D.access = 'full'; save(); toast('Akses lengkap terbuka! 🎉');
+  show(D.name ? 'home' : 'setup');
+});
+$('#tryFree').onclick = () => { D.access = 'free'; save(); show(D.name ? 'home' : 'setup'); };
+$('#enterCode').onclick = () => { $('#code').value = ''; $('#codeErr').textContent = ''; show('gate'); };
+
+/* ---------- profil ---------- */
+let chosenAv = D.avatar;
+function renderAvatars() {
+  $('#avatarPick').innerHTML = AVATARS.map(a => `<button class="av ${a === chosenAv ? 'on' : ''}" data-av="${a}" aria-label="Karakter ${a}">${a}</button>`).join('');
+}
+$('#avatarPick').addEventListener('click', e => { const b = e.target.closest('[data-av]'); if (b) { chosenAv = b.dataset.av; renderAvatars(); } });
+$('#setupGo').onclick = () => {
+  const n = $('#kidName').value.trim();
+  if (n.length < 2) { $('#setupErr').textContent = 'Tulis nama panggilan minimal 2 huruf.'; return; }
+  D.name = n; D.avatar = chosenAv; save(); show('home');
+};
+
+/* ---------- beranda ---------- */
+function renderHome() {
+  const lv = level();
+  $('#hAv').textContent = D.avatar;
+  $('#hName').textContent = 'Halo, ' + D.name + '!';
+  $('#hLvl').textContent = `Lv ${lv} · ${TITLES[Math.min(lv - 1, TITLES.length - 1)]}`;
+  $('#hBar').style.width = ((D.xp % 150) / 150 * 100) + '%';
+  $('#hStars').textContent = D.stars;
+  $('#subjects').innerHTML = Object.entries(SUBJECTS).map(([k, s]) => {
+    const st = D.stats[k], locked = !full() && k !== 'math';
+    const withLesson = TOPICS[k].filter(t => t.lesson), done = withLesson.filter(t => tData(k, t.id).learned).length;
+    const acc = st.q ? Math.round(st.c / st.q * 100) + '% benar' : '';
+    return `<button class="subj ${s.cls} ${locked ? 'locked' : ''}" data-subj="${k}">
+      ${acc && !locked ? `<span class="acc">${acc}</span>` : ''}<span class="em" aria-hidden="true">${s.em}</span>
+      <h3>${s.name}</h3><small>${TOPICS[k].length} topik · ${done}/${withLesson.length} materi selesai</small></button>`;
+  }).join('');
+  $('#upsell').hidden = full();
+  $('#badges').innerHTML = BADGES.map(b => `<div class="bdg ${D.badges.includes(b.id) ? 'on' : 'off'}"><span>${b.em}</span>${b.name}</div>`).join('');
+}
+$('#subjects').addEventListener('click', e => {
+  const b = e.target.closest('[data-subj]'); if (!b) return;
+  const k = b.dataset.subj;
+  if (!full() && k !== 'math') { toast('Pelajaran ini ada di akses lengkap 🔒'); $('#upsell').scrollIntoView({ behavior:'smooth', block:'center' }); return; }
+  CUR.subj = k; show('subject');
+});
+$('#openReport').onclick = () => show('report');
+
+/* ---------- daftar topik ---------- */
+function renderSubject() {
+  const s = SUBJECTS[CUR.subj], list = TOPICS[CUR.subj];
+  $('#sTitle').textContent = s.name;
+  const done = list.filter(t => t.lesson && tData(CUR.subj, t.id).learned).length;
+  $('#sHero').className = 'subj-hero ' + s.cls;
+  $('#sHero').innerHTML = `<span class="em" aria-hidden="true">${s.em}</span><div><b>Baca materinya dulu, lalu latihan</b><small>${done} dari ${list.filter(t => t.lesson).length} materi sudah dipelajari</small></div>`;
+  $('#topics').innerHTML = list.map(t => {
+    const td = tData(CUR.subj, t.id), lock = !unlocked(CUR.subj, t.id);
+    const stars = [1, 2, 3].map(n => n <= td.best ? '⭐' : '☆').join('');
+    const extra = t.timed && D.best60 ? `<br>Rekor ${D.best60}` : '';
+    return `<div class="topic ${lock ? 'locked' : ''}">
+      <div class="t-head"><span class="t-ic" aria-hidden="true">${t.em}</span><span><b>${t.name}${lock ? ' 🔒' : ''}</b><small>${t.desc}</small></span>
+        <span class="t-status">${t.lesson ? (td.learned ? '<span class="done">✓ Materi</span>' : 'Belum dibaca') : ''}<br>${stars}${extra}</span></div>
+      <div class="t-btns ${t.lesson ? '' : 'one'}">
+        ${t.lesson ? `<button class="btn btn-ghost btn-sm" data-learn="${t.id}">📖 Belajar</button>` : ''}
+        <button class="btn btn-main btn-sm" data-practice="${t.id}">${t.timed ? '⚡ Mulai tantangan' : '✏️ Latihan'}</button>
+      </div></div>`;
+  }).join('');
+}
+$('#topics').addEventListener('click', e => {
+  const l = e.target.closest('[data-learn]'), p = e.target.closest('[data-practice]');
+  const id = (l || p)?.dataset[l ? 'learn' : 'practice']; if (!id) return;
+  if (!unlocked(CUR.subj, id)) { toast('Topik ini ada di akses lengkap 🔒'); return; }
+  CUR.topic = id;
+  if (l) openLesson(); else startQuiz();
+});
+
+/* ---------- materi ---------- */
+let LI = 0;
+function openLesson() { LI = 0; show('lesson'); renderLesson(); }
+function renderLesson() {
+  const t = topicOf(CUR.subj, CUR.topic), cards = t.lesson, c = cards[LI], s = SUBJECTS[CUR.subj];
+  $('#lTitle').textContent = `${t.em} ${t.name}`;
+  $('#lDots').innerHTML = cards.map((_, i) => `<span class="${i === LI ? 'on' : ''}"></span>`).join('');
+  $('#lChip').textContent = `Materi ${LI + 1} dari ${cards.length}`; $('#lChip').style.background = s.color;
+  $('#lHead').textContent = c.t;
+  $('#lBody').innerHTML = c.h;
+  mountWidget($('#lWidget'), c.w);
+  $('#lPrev').disabled = LI === 0;
+  const last = LI === cards.length - 1;
+  $('#lNext').textContent = last ? '✏️ Mulai latihan' : 'Lanjut →';
+  if (last) {
+    const k = tKey(CUR.subj, CUR.topic);
+    if (!tData(CUR.subj, CUR.topic).learned) {
+      D.topics[k] = Object.assign(tData(CUR.subj, CUR.topic), { learned:true });
+      if (learnedCount() >= 5 && giveBadge('scholar')) toast('Lencana baru: 📖 5 Materi Selesai!');
+      save();
+    }
+  }
+}
+$('#lPrev').onclick = () => { if (LI > 0) { LI--; renderLesson(); window.scrollTo(0, 0); } };
+$('#lNext').onclick = () => {
+  const n = topicOf(CUR.subj, CUR.topic).lesson.length;
+  if (LI < n - 1) { LI++; renderLesson(); window.scrollTo(0, 0); } else startQuiz();
+};
+$('#lessonBack').onclick = () => show('subject');
+
+/* ================== LATIHAN ================== */
+let Q = null;
+function startQuiz() {
+  const { subj, topic } = CUR, t = topicOf(subj, topic);
+  let pool = null, total = 10;
+  if (subj === 'sains' || subj === 'indo') {
+    pool = shuffle((subj === 'sains' ? SAINS : INDO).filter(q => q[0] === topic));
+    total = Math.min(10, pool.length);
+  }
+  Q = { subj, topic, i:0, total, pool, correct:0, streak:0, bestStreak:0, xp:0, recent:[], timed: !!t.timed, timeLeft:60, timer:null, done:false };
+  $('#qTimer').hidden = !Q.timed; $('#qStreak').hidden = Q.timed; $('#qTimer').classList.remove('low');
+  show('quiz'); nextQuestion();
+  if (Q.timed) {
+    $('#qTimer').textContent = '60 dtk';
+    Q.timer = setInterval(() => {
+      Q.timeLeft--; $('#qTimer').textContent = Q.timeLeft + ' dtk';
+      $('#qTimer').classList.toggle('low', Q.timeLeft <= 10);
+      $('#qBar').style.width = ((60 - Q.timeLeft) / 60 * 100) + '%';
+      if (Q.timeLeft <= 0) finishQuiz();
+    }, 1000);
+  }
+}
+function makeQuestion() {
+  if (Q.subj === 'math') return MATH[Q.topic]();
+  if (Q.subj === 'eng') return Q.topic === 'aan' ? aanQ(Q.recent) : engQ(Q.topic, Q.recent);
+  const q = Q.pool[Q.i % Q.pool.length], options = shuffle(q.slice(2, 6));
+  return { text: q[1], options, answer: options.indexOf(q[2]), explain: q[6] };
+}
+function nextQuestion() {
+  if (!Q.timed && Q.i >= Q.total) return finishQuiz();
+  const q = Q.cur = makeQuestion(), s = SUBJECTS[Q.subj], t = topicOf(Q.subj, Q.topic);
+  $('#qChip').textContent = Q.timed ? `Soal ${Q.i + 1}` : `${t.name} · ${Q.i + 1}/${Q.total}`;
+  $('#qChip').style.background = s.color;
+  $('#qVis').hidden = !q.vis; $('#qVis').textContent = q.vis || '';
+  $('#qText').textContent = q.text; $('#qText').classList.toggle('big', !!q.big);
+  $('#opts').innerHTML = q.options.map((o, i) => `<button class="opt" data-i="${i}">${esc(o)}</button>`).join('');
+  $('#feedback').hidden = true;
+  if (!Q.timed) $('#qBar').style.width = (Q.i / Q.total * 100) + '%';
+  $('#qStreak').textContent = Q.streak >= 2 ? '🔥' + Q.streak : '';
+}
+$('#opts').addEventListener('click', e => {
+  const b = e.target.closest('.opt'); if (!b || b.disabled || Q.done) return;
+  const i = Number(b.dataset.i), ok = i === Q.cur.answer;
+  document.querySelectorAll('.opt').forEach(x => x.disabled = true);
+  b.classList.add(ok ? 'ok' : 'bad');
+  if (!ok) document.querySelector(`.opt[data-i="${Q.cur.answer}"]`).classList.add('ok');
+  const st = D.stats[Q.subj]; st.q++;
+  if (ok) { st.c++; Q.correct++; Q.streak++; Q.bestStreak = Math.max(Q.bestStreak, Q.streak); Q.xp += 10 + (Q.streak >= 3 ? 2 : 0); sound(true); }
+  else { Q.streak = 0; sound(false); }
+  Q.i++;
+  if (Q.timed) { setTimeout(() => { if (!Q.done) nextQuestion(); }, ok ? 250 : 700); return; }
+  $('#fbTitle').textContent = ok ? pick(['Hebat! Benar! 🎉','Mantap! ✅','Pintar sekali! 🌟','Tepat! 👏']) : 'Belum tepat, tidak apa-apa 💪';
+  $('#fbText').textContent = Q.cur.explain || '';
+  $('#feedback').className = 'feedback ' + (ok ? 'ok' : 'bad'); $('#feedback').hidden = false;
+  $('#nextQ').textContent = Q.i >= Q.total ? 'Lihat hasil' : 'Lanjut';
+  $('#qStreak').textContent = Q.streak >= 2 ? '🔥' + Q.streak : '';
+  $('#feedback').scrollIntoView({ behavior:'smooth', block:'nearest' });
+});
+$('#nextQ').onclick = nextQuestion;
+$('#quitQuiz').onclick = () => { clearInterval(Q.timer); Q.done = true; save(); show('subject'); };
+
+function finishQuiz() {
+  if (Q.done) return; Q.done = true; clearInterval(Q.timer);
+  let stars;
+  if (Q.timed) stars = Q.correct >= 20 ? 3 : Q.correct >= 12 ? 2 : Q.correct >= 6 ? 1 : 0;
+  else { const r = Q.correct / Q.total; stars = r >= .9 ? 3 : r >= .7 ? 2 : r >= .5 ? 1 : 0; }
+  const before = [...D.badges];
+  D.xp += Q.xp; D.stars += stars;
+  const k = tKey(Q.subj, Q.topic), td = tData(Q.subj, Q.topic);
+  D.topics[k] = Object.assign(td, { best: Math.max(td.best, stars) });
+  giveBadge('first');
+  if (!Q.timed && Q.correct === Q.total) giveBadge('perfect');
+  if (Q.bestStreak >= 5) giveBadge('streak5');
+  if (D.stats.math.c >= 50) giveBadge('math50');
+  if (Object.values(D.stats).every(s => s.q > 0)) giveBadge('explorer');
+  if (Q.timed) { D.best60 = Math.max(D.best60, Q.correct); if (Q.correct >= 15) giveBadge('speed'); }
+  save();
+
+  const t = topicOf(Q.subj, Q.topic);
+  $('#rTitle').textContent = `${t.name} selesai!`;
+  $('#rStars').innerHTML = [1, 2, 3].map(n => `<span class="${n <= stars ? '' : 'off'}">⭐</span>`).join('');
+  $('#rScore').textContent = Q.timed ? `${Q.correct} benar` : `${Q.correct}/${Q.total}`;
+  $('#rMsg').textContent = Q.timed ? (Q.correct >= D.best60 ? 'Rekor barumu! Luar biasa!' : `Rekormu ${D.best60}. Ayo pecahkan!`)
+    : stars === 3 ? `Luar biasa, ${D.name}! Kamu juara!` : stars === 2 ? 'Bagus sekali! Sedikit lagi sempurna.' : stars === 1 ? 'Lumayan! Baca lagi materinya, pasti makin jago.' : 'Tidak apa-apa. Yuk, baca materinya dulu lalu coba lagi!';
+  $('#rReward').innerHTML = `<span>+${Q.xp} XP</span><span>+${stars} ⭐</span>`;
+  const newB = D.badges.filter(b => !before.includes(b)).map(id => BADGES.find(x => x.id === id));
+  $('#rBadges').innerHTML = newB.map(b => `<div class="newbadge">Lencana baru: ${b.em} ${b.name}</div>`).join('');
+  $('#rUpsell').hidden = full();
+  $('#rLesson').hidden = !t.lesson;
+  show('result');
+  if (stars >= 2 || newB.length) confetti();
+}
+$('#rHome').onclick = () => show('subject');
+$('#rAgain').onclick = () => startQuiz();
+$('#rLesson').onclick = () => openLesson();
+
+/* ---------- laporan orang tua ---------- */
+function renderReport() {
+  const tq = Object.values(D.stats).reduce((s, x) => s + x.q, 0), tc = Object.values(D.stats).reduce((s, x) => s + x.c, 0);
+  $('#totals').innerHTML = `<div><b>${learnedCount()}/${lessonCount()}</b><small>Materi dipelajari</small></div><div><b>${tq}</b><small>Soal dikerjakan</small></div><div><b>${tq ? Math.round(tc / tq * 100) : 0}%</b><small>Jawaban benar</small></div>`;
+  let weakest = null, weakAcc = 101;
+  $('#repRows').innerHTML = Object.entries(SUBJECTS).map(([k, s]) => {
+    const st = D.stats[k], acc = st.q ? Math.round(st.c / st.q * 100) : 0;
+    if (st.q >= 5 && acc < weakAcc) { weakAcc = acc; weakest = s.name; }
+    return `<div class="rep-row"><span style="font-size:1.5rem">${s.em}</span>
+      <div><b>${s.name}</b><div class="bar" style="margin-top:6px"><i style="width:${acc}%;background:${s.color}"></i></div></div>
+      <span class="rep-num">${st.q ? acc + '%' : '–'}<br><small class="muted">${st.c}/${st.q}</small></span></div>`;
+  }).join('');
+  $('#repTip').textContent = tq < 10 ? 'Laporan akan lebih akurat setelah anak mengerjakan lebih banyak soal.'
+    : weakest && weakAcc < 80 ? `Saran: ajak anak membaca ulang materi ${weakest} lalu berlatih lagi (${weakAcc}% benar).`
+    : 'Hasil belajar sudah bagus di semua pelajaran. Pertahankan latihan rutin setiap hari!';
+  $('#toggleSound').textContent = D.sound ? '🔊 Suara: nyala' : '🔇 Suara: mati';
+  $('#resetBox').innerHTML = '<button class="btn btn-ghost full" id="resetAsk" style="color:var(--bad)">Hapus semua progres</button>';
+}
+$('#toggleSound').onclick = () => { D.sound = !D.sound; save(); renderReport(); };
+$('#editProfile').onclick = () => { chosenAv = D.avatar; $('#kidName').value = D.name; renderAvatars(); show('setup'); };
+$('#resetBox').addEventListener('click', e => {
+  if (e.target.id === 'resetAsk') {
+    $('#resetBox').innerHTML = '<p style="font-weight:800">Yakin? Semua bintang, XP, lencana, dan catatan materi akan hilang.</p><div class="row-btn"><button class="btn btn-ghost" id="resetNo">Batal</button><button class="btn btn-main" id="resetYes" style="background:var(--bad);box-shadow:0 4px 0 #a02a2e">Ya, hapus</button></div>';
+  } else if (e.target.id === 'resetNo') renderReport();
+  else if (e.target.id === 'resetYes') {
+    const keep = { access:D.access, name:D.name, avatar:D.avatar, sound:D.sound };
+    D = Object.assign(fresh(), keep); save(); toast('Progres sudah dihapus'); renderReport();
+  }
+});
+
+/* ---------- suara ---------- */
+let AC = null;
+function sound(ok) {
+  if (!D.sound) return;
+  try {
+    AC = AC || new (window.AudioContext || window.webkitAudioContext)();
+    (ok ? [660, 880] : [300, 220]).forEach((f, i) => {
+      const o = AC.createOscillator(), g = AC.createGain(), t = AC.currentTime + i * 0.11;
+      o.type = ok ? 'triangle' : 'sine'; o.frequency.value = f;
+      g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.18, t + 0.02); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.18);
+      o.connect(g).connect(AC.destination); o.start(t); o.stop(t + 0.2);
+    });
+  } catch (e) {}
+}
+
+/* ---------- konfeti ---------- */
+function confetti() {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const c = $('#confetti'), ctx = c.getContext('2d'); c.hidden = false;
+  c.width = innerWidth; c.height = innerHeight;
+  const cols = ['#ffbe2e', '#ff6a4d', '#3d7bf0', '#1fa463', '#0f8f86'];
+  const P = Array.from({ length: 120 }, () => ({ x: Math.random() * c.width, y: -20 - Math.random() * c.height * .5, vx: (Math.random() - .5) * 3, vy: 2 + Math.random() * 3, r: 4 + Math.random() * 5, a: Math.random() * 6, col: pick(cols) }));
+  const t0 = performance.now();
+  (function f(t) {
+    ctx.clearRect(0, 0, c.width, c.height);
+    P.forEach(p => { p.x += p.vx; p.y += p.vy; p.a += .1; ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.a); ctx.fillStyle = p.col; ctx.fillRect(-p.r, -p.r / 2, p.r * 2, p.r); ctx.restore(); });
+    if (t - t0 < 2600) requestAnimationFrame(f); else { ctx.clearRect(0, 0, c.width, c.height); c.hidden = true; }
+  })(t0);
+}
+
+/* ---------- mulai ---------- */
+renderAvatars();
+show(!D.access ? 'gate' : D.name ? 'home' : 'setup');
+</script>
+</body>
+</html>
