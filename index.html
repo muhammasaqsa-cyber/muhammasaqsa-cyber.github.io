@@ -97,7 +97,7 @@
   .s-sains{background:var(--sains);box-shadow:0 4px 0 #157e4b}
   .s-indo{background:var(--indo);box-shadow:0 4px 0 #ab2d34}
   .upsell{background:var(--tipbg);border:2px dashed var(--star);border-radius:20px;padding:16px;display:flex;flex-direction:column;gap:10px}
-  .upsell b{font-family:var(--display);font-size:1.1rem}
+  .upsell > b{font-family:var(--display);font-size:1.1rem}
   .badges{display:flex;gap:10px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}
   .badges::-webkit-scrollbar{display:none}
   .bdg{flex-shrink:0;width:86px;text-align:center;background:var(--card);border-radius:18px;padding:12px 6px;box-shadow:0 2px 0 var(--line);font-size:.72rem;font-weight:800;color:var(--soft)}
@@ -264,6 +264,32 @@
   .totals b{display:block;font-family:var(--display);font-size:1.5rem;font-variant-numeric:tabular-nums}
   .totals small{color:var(--soft);font-weight:700;font-size:.78rem}
 
+  /* AKUN & ADMIN */
+  .btn-google{background:#ffffff;border:2px solid var(--line);color:var(--ink)}
+  .btn-google svg{width:20px;height:20px;flex-shrink:0}
+  .seg{display:grid;grid-template-columns:1fr 1fr;background:var(--bg);border-radius:14px;padding:4px;margin-bottom:14px}
+  .seg button{padding:10px;border-radius:10px;font-family:var(--display);font-weight:600;color:var(--soft)}
+  .seg button.on{background:var(--card);color:var(--ink);box-shadow:0 2px 0 var(--line)}
+  .field.plain{text-transform:none;letter-spacing:0}
+  .link-btn{display:block;margin:12px auto 0;color:var(--brand);font-weight:800;font-size:.92rem}
+  .note{background:var(--tipbg);border-radius:14px;padding:12px 14px;font-size:.9rem;font-weight:700}
+  .ok-msg{color:var(--ok);font-weight:700;font-size:.9rem;margin-top:6px}
+  .loading{min-height:70vh;display:grid;place-items:center;text-align:center;gap:14px}
+  .spin{width:40px;height:40px;border:4px solid var(--line);border-top-color:var(--brand);border-radius:50%;animation:spin 1s linear infinite;margin:0 auto}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .pill{padding:3px 10px;border-radius:999px;font-weight:800;font-size:.75rem;white-space:nowrap}
+  .pill.prem{background:var(--star);color:#3a2a00}
+  .pill.free{background:var(--bg);color:var(--soft)}
+  .acct{display:grid;gap:10px}
+  .acct-row{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+  .acct-row b{overflow-wrap:anywhere;min-width:0}
+  .urow{display:grid;gap:8px;padding:14px 0;border-bottom:2px solid var(--bg)}
+  .urow:last-child{border-bottom:0}
+  .urow-top{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+  .urow-top b{overflow-wrap:anywhere;min-width:0}
+  .urow small{color:var(--soft);font-weight:700}
+  .btn-danger{background:var(--card);border:2px solid var(--bad);color:var(--bad)}
+  .btn.confirm{background:var(--star);color:#3a2a00;border-color:var(--star)}
   canvas#confetti{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:60}
   .toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translate(-50%,20px);background:var(--ink);color:#fff;padding:10px 18px;border-radius:999px;font-weight:800;font-size:.9rem;opacity:0;transition:.3s;z-index:70;pointer-events:none;max-width:calc(100% - 32px);text-align:center}
   .toast.show{opacity:1;transform:translate(-50%,0)}
@@ -273,6 +299,7 @@
 </head>
 <body>
 
+
 <main class="app" id="app">
 
   <!-- GATE -->
@@ -281,21 +308,36 @@
     <div class="hero-card">
       <span class="small" style="font-weight:800;opacity:.85">Untuk anak 8–12 tahun · SD kelas 3–6</span>
       <h1>Belajar sambil main, jadi juara di kelas!</h1>
-      <p>Materi lengkap dengan peraga interaktif, lalu latihan soal yang selalu baru, lengkap dengan bintang, level, dan lencana.</p>
+      <p>Materi lengkap dengan peraga interaktif, lalu latihan soal yang selalu baru. Progres tersimpan di akunmu, jadi aman walau ganti HP.</p>
       <div class="chips"><span>🧮 Matematika</span><span>🔤 B. Inggris</span><span>🔬 Sains</span><span>🗺️ Indonesia</span></div>
       <span class="deco" aria-hidden="true">🏆</span>
     </div>
     <div class="card">
-      <form id="gateForm" novalidate>
-        <label class="lbl" for="code">Kode akses</label>
-        <input class="field" id="code" placeholder="Contoh: JUARA2026" autocomplete="off" autocapitalize="characters" />
-        <p class="err" id="codeErr" role="alert"></p>
-        <button class="btn btn-main full" type="submit">Masuk</button>
+      <p class="note" id="gateNote" hidden></p>
+      <button class="btn btn-google full" id="googleBtn"><svg viewBox="0 0 48 48" aria-hidden="true"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.4-.4-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-7.9l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.4-.4-3.5z"/></svg>Masuk dengan Google</button>
+      <div class="or" style="margin-block:16px">atau pakai email</div>
+      <div class="seg" role="tablist" aria-label="Pilih masuk atau daftar">
+        <button class="on" data-amode="login" role="tab" aria-selected="true">Masuk</button>
+        <button data-amode="register" role="tab" aria-selected="false">Daftar baru</button>
+      </div>
+      <form id="authForm" novalidate>
+        <label class="lbl" for="aEmail">Email</label>
+        <input class="field plain" id="aEmail" type="email" inputmode="email" autocomplete="email" placeholder="nama@email.com" />
+        <label class="lbl" for="aPass" style="margin-top:12px">Kata sandi</label>
+        <input class="field plain" id="aPass" type="password" autocomplete="current-password" placeholder="Minimal 6 karakter" />
+        <p class="err" id="authErr" role="alert"></p>
+        <button class="btn btn-main full" type="submit" id="authSubmit">Masuk</button>
       </form>
+      <button class="link-btn" id="forgotBtn">Lupa kata sandi?</button>
       <div class="or" style="margin-block:16px">atau</div>
-      <button class="btn btn-ghost full" id="tryFree">Coba gratis dulu</button>
-      <p class="buy-link" style="margin-top:14px">Belum punya kode? <a id="buyLink1" target="_blank" rel="noopener">Beli akses lengkap</a></p>
+      <button class="btn btn-ghost full" id="tryFree">Coba gratis tanpa akun</button>
+      <p class="muted small" style="text-align:center;margin-top:10px">Tanpa akun, progres hanya tersimpan di HP ini dan materi yang terbuka hanya Perkalian.</p>
     </div>
+  </section>
+
+  <!-- LOADING -->
+  <section class="screen loading" id="s-loading" hidden>
+    <div><div class="spin" aria-hidden="true"></div><p class="muted" style="margin-top:14px;font-weight:800" id="loadingText">Memuat…</p></div>
   </section>
 
   <!-- SETUP -->
@@ -303,7 +345,7 @@
     <div class="logo"><span class="logo-badge">⭐</span>Juara Kelas</div>
     <div class="card">
       <h2 style="font-size:1.5rem">Halo! Siapa namamu?</h2>
-      <p class="muted" style="margin-bottom:14px">Namamu akan muncul di papan prestasi.</p>
+      <p class="muted" style="margin-bottom:14px">Isi nama anak yang akan belajar. Namanya akan muncul di papan prestasi.</p>
       <label class="lbl" for="kidName">Nama panggilan</label>
       <input class="field name" id="kidName" maxlength="14" placeholder="Contoh: Dimas" autocomplete="off" />
       <label class="lbl" style="margin-top:16px">Pilih karakter</label>
@@ -325,15 +367,20 @@
     </div>
     <div class="section-t">Mau belajar apa hari ini?</div>
     <div class="subjects" id="subjects"></div>
-    <div class="upsell" id="upsell" hidden>
-      <b>🔓 Buka semua materi</b>
-      <p class="small">Mode gratis hanya berisi materi dan latihan perkalian. Akses lengkap membuka semua topik Matematika, Bahasa Inggris, Sains, dan Pengetahuan Indonesia.</p>
-      <a class="btn btn-star full" id="buyLink2" target="_blank" rel="noopener" style="text-decoration:none">Beli akses lengkap</a>
-      <button class="btn btn-ghost full" id="enterCode">Saya sudah punya kode</button>
-    </div>
+    <div class="upsell" id="upsell" hidden></div>
     <div class="section-t">Lencanaku</div>
     <div class="badges" id="badges"></div>
-    <button class="btn btn-ghost full" id="openReport">📊 Laporan untuk orang tua</button>
+    <button class="btn btn-ghost full" id="openReport">📊 Laporan & akun</button>
+    <button class="btn btn-ghost full" id="openAdmin" hidden>🛠️ Halaman admin</button>
+  </section>
+
+  <!-- ADMIN -->
+  <section class="screen" id="s-admin" hidden>
+    <div class="head-row"><button class="icon-btn" data-back="home" aria-label="Kembali">←</button><h2>Halaman Admin</h2><button class="icon-btn" id="adminRefresh" aria-label="Muat ulang daftar">↻</button></div>
+    <div class="totals" id="adminTotals"></div>
+    <input class="field plain" id="adminSearch" type="search" placeholder="Cari email atau nama anak" aria-label="Cari akun" />
+    <div class="card" style="padding-block:6px"><div id="adminList"></div></div>
+    <p class="muted small">Hanya akun admin yang bisa membuka halaman ini dan mengubah status Premium. Perubahan langsung berlaku di HP pengguna.</p>
   </section>
 
   <!-- TOPICS -->
@@ -390,11 +437,7 @@
       <div class="reward" id="rReward"></div>
       <div id="rBadges" style="display:grid;gap:8px;width:100%"></div>
     </div>
-    <div class="upsell" id="rUpsell" hidden style="width:100%;text-align:left">
-      <b>Seru, kan? Masih banyak lagi!</b>
-      <p class="small">Akses lengkap membuka semua materi dan latihan: pecahan, soal cerita, Bahasa Inggris, Sains, Pengetahuan Indonesia, dan Tantangan 60 Detik.</p>
-      <a class="btn btn-star full" id="buyLink3" target="_blank" rel="noopener" style="text-decoration:none">Beli akses lengkap</a>
-    </div>
+    <div class="upsell" id="rUpsell" hidden style="width:100%;text-align:left"></div>
     <button class="btn btn-ghost full" id="rLesson">📖 Pelajari lagi materinya</button>
     <div class="row-btn">
       <button class="btn btn-ghost" id="rHome">Pilih topik</button>
@@ -404,13 +447,14 @@
 
   <!-- REPORT -->
   <section class="screen" id="s-report" hidden>
-    <div class="head-row"><button class="icon-btn" data-back="home" aria-label="Kembali">←</button><h2>Laporan Belajar</h2></div>
+    <div class="head-row"><button class="icon-btn" data-back="home" aria-label="Kembali">←</button><h2>Laporan & Akun</h2></div>
     <div class="totals" id="totals"></div>
     <div class="card">
       <h3 style="font-size:1.15rem;margin-bottom:6px">Ketepatan per pelajaran</h3>
       <div id="repRows"></div>
       <p class="muted small" style="margin-top:10px" id="repTip"></p>
     </div>
+    <div class="card acct" id="accountCard"></div>
     <div class="card" style="display:grid;gap:10px">
       <h3 style="font-size:1.15rem">Pengaturan</h3>
       <button class="btn btn-ghost full" id="toggleSound"></button>
@@ -423,24 +467,50 @@
 <canvas id="confetti" hidden></canvas>
 <div class="toast" id="toast" role="status"></div>
 
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 <script>
 /* ================== PENGATURAN ==================
-   CODES   : kode akses untuk membuka semua materi (huruf besar).
-   BUY_URL : link halaman pembelian.
+   ADMIN_EMAIL : satu-satunya akun yang bisa membuka halaman admin
+                 dan mengubah status Premium (harus login dengan Google).
+   FIREBASE    : pengaturan project Firebase "juara-kelas".
 ================================================== */
 const CONFIG = {
-  CODES: ['JUARA2026'],
-  BUY_URL: 'https://lynk.id/'
+  ADMIN_EMAIL: 'muhammasaqsa@gmail.com',
+  FIREBASE: {
+    apiKey: 'AIzaSyAAz2UiWh0x_7bewgMtrkcHNmgMFNsm5Y4',
+    authDomain: 'juara-kelas-ef70f.firebaseapp.com',
+    projectId: 'juara-kelas-ef70f',
+    storageBucket: 'juara-kelas-ef70f.firebasestorage.app',
+    messagingSenderId: '440731755089',
+    appId: '1:440731755089:web:3cbbd37523123e40b20e70'
+  }
 };
 
-/* ---------- penyimpanan (per perangkat) ---------- */
-const KEY = 'juara_kelas_v1';
-const fresh = () => ({ access:null, name:'', avatar:'🦁', xp:0, stars:0,
+/* ---------- data progres ----------
+   MODE: 'none' (belum masuk), 'guest' (tanpa akun), 'user' (akun Firebase).
+   Akun: progres disimpan di Firestore users/{uid}.progress, dengan salinan di HP. */
+const fresh = () => ({ name:'', avatar:'🦁', xp:0, stars:0,
   stats:{math:{q:0,c:0},eng:{q:0,c:0},sains:{q:0,c:0},indo:{q:0,c:0}},
   topics:{}, badges:[], best60:0, sound:true });
-let D = fresh();
-try { const raw = localStorage.getItem(KEY); if (raw) { const s = JSON.parse(raw); D = Object.assign(fresh(), s); D.topics = s.topics || {}; } } catch (e) {}
-const save = () => { try { localStorage.setItem(KEY, JSON.stringify(D)); } catch (e) {} };
+const normalize = s => { const d = Object.assign(fresh(), s || {}); d.stats = Object.assign(fresh().stats, (s && s.stats) || {}); d.topics = (s && s.topics) || {}; d.badges = (s && s.badges) || []; return d; };
+let MODE = 'none', USER = null, PREMIUM = false, D = fresh();
+const GUEST_KEY = 'juara_kelas_guest';
+const localKey = () => MODE === 'user' && USER ? 'juara_kelas_u_' + USER.uid : GUEST_KEY;
+function loadLocal(key) { try { const raw = localStorage.getItem(key); if (raw) return normalize(JSON.parse(raw)); } catch (e) {} return fresh(); }
+let cloudTimer = null, cloudDirty = false;
+function save() {
+  try { localStorage.setItem(localKey(), JSON.stringify(D)); } catch (e) {}
+  if (MODE === 'user' && userRef) { cloudDirty = true; clearTimeout(cloudTimer); cloudTimer = setTimeout(flushCloud, 1200); }
+}
+function flushCloud() {
+  if (!cloudDirty || MODE !== 'user' || !userRef) return Promise.resolve();
+  cloudDirty = false; clearTimeout(cloudTimer);
+  return userRef.update({ progress: JSON.parse(JSON.stringify(D)), updatedAt: FV.serverTimestamp() })
+    .catch(e => { cloudDirty = true; console.warn('Gagal menyimpan ke akun', e); });
+}
+document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') flushCloud(); });
 
 /* ---------- helper ---------- */
 const $ = s => document.querySelector(s);
@@ -922,7 +992,8 @@ const BADGES = [
 ];
 const AVATARS = ['🦁','🐯','🐼','🦊','🐸','🐵','🦄','🐙','🐨','🐧','🦖','🚀'];
 const TITLES = ['Pemula','Penjelajah','Jagoan','Bintang Kelas','Juara','Super Juara'];
-const full = () => D.access === 'full';
+const isAdmin = () => MODE === 'user' && !!USER && !!USER.email && USER.email.toLowerCase() === CONFIG.ADMIN_EMAIL.toLowerCase() && USER.emailVerified;
+const full = () => MODE === 'user' && (PREMIUM || isAdmin());
 const level = () => Math.floor(D.xp / 150) + 1;
 const tKey = (s, t) => `${s}.${t}`;
 const tData = (s, t) => D.topics[tKey(s, t)] || { learned:false, best:0 };
@@ -940,24 +1011,219 @@ function show(id) {
   if (id === 'home') renderHome();
   if (id === 'subject') renderSubject();
   if (id === 'report') renderReport();
+  if (id === 'admin') loadAdmin();
+  if (id === 'gate' && typeof setAuthMode === 'function') { setAuthMode('login'); $('#aPass').value = ''; }
+}
+function currentScreen() { const s = [...document.querySelectorAll('.screen')].find(x => !x.hidden); return s ? s.id.slice(2) : ''; }
+function rerender() {
+  const c = currentScreen();
+  if (c === 'home') renderHome();
+  if (c === 'subject') renderSubject();
+  if (c === 'report') renderReport();
 }
 document.addEventListener('click', e => { const b = e.target.closest('[data-back]'); if (b) show(b.dataset.back); });
-['#buyLink1', '#buyLink2', '#buyLink3'].forEach(s => $(s).href = CONFIG.BUY_URL);
 
-/* ---------- gerbang kode ---------- */
-$('#gateForm').addEventListener('submit', e => {
+/* ================== AKUN ================== */
+let auth = null, db = null, FV = null, userRef = null, unsubDoc = null, firstSnap = true, authMode = 'login';
+const AUTH_ERR = {
+  'auth/invalid-email': 'Format email belum benar.',
+  'auth/missing-email': 'Isi email dulu, ya.',
+  'auth/user-not-found': 'Email atau kata sandi salah.',
+  'auth/wrong-password': 'Email atau kata sandi salah.',
+  'auth/invalid-credential': 'Email atau kata sandi salah.',
+  'auth/invalid-login-credentials': 'Email atau kata sandi salah.',
+  'auth/email-already-in-use': 'Email ini sudah terdaftar. Pilih tab "Masuk".',
+  'auth/weak-password': 'Kata sandi minimal 6 karakter.',
+  'auth/too-many-requests': 'Terlalu banyak percobaan. Tunggu beberapa menit, lalu coba lagi.',
+  'auth/network-request-failed': 'Koneksi internet bermasalah. Coba lagi.',
+  'auth/unauthorized-domain': 'Alamat website ini belum diizinkan di Firebase (Authorized domains).',
+  'auth/operation-not-allowed': 'Cara login ini belum dinyalakan di Firebase.',
+  'auth/user-disabled': 'Akun ini dinonaktifkan.',
+  'auth/web-storage-unsupported': 'Browser ini memblokir penyimpanan. Buka website di Chrome.'
+};
+const authMsg = e => AUTH_ERR[e && e.code] || ('Terjadi kesalahan' + (e && e.code ? ` (${e.code})` : '') + '. Coba lagi.');
+function setAuthErr(msg) { $('#authErr').textContent = msg || ''; $('#authErr').className = 'err'; }
+function setAuthOk(msg) { $('#authErr').textContent = msg; $('#authErr').className = 'ok-msg'; }
+function gateNote(msg) { $('#gateNote').hidden = !msg; $('#gateNote').textContent = msg || ''; }
+const IN_APP = /FBAN|FBAV|Instagram|Line\/|; wv\)|TikTok|musical_ly|Bytedance/i.test(navigator.userAgent);
+
+function initFirebase() {
+  if (!window.firebase || !firebase.initializeApp) {
+    gateNote('Sistem akun gagal dimuat. Periksa koneksi internet lalu muat ulang halaman. Sementara itu kamu tetap bisa mencoba tanpa akun.');
+    $('#googleBtn').disabled = true; $('#authSubmit').disabled = true;
+    show('gate'); return;
+  }
+  firebase.initializeApp(CONFIG.FIREBASE);
+  auth = firebase.auth(); db = firebase.firestore(); FV = firebase.firestore.FieldValue;
+  auth.getRedirectResult().catch(e => { show('gate'); setAuthErr(authMsg(e)); });
+  auth.onAuthStateChanged(onAuth);
+}
+
+function onAuth(user) {
+  if (unsubDoc) { unsubDoc(); unsubDoc = null; }
+  if (!user) {
+    USER = null; PREMIUM = false; userRef = null;
+    if (MODE !== 'guest') { MODE = 'none'; show('gate'); }
+    return;
+  }
+  USER = user; MODE = 'user'; firstSnap = true;
+  $('#loadingText').textContent = 'Memuat akunmu…'; show('loading');
+  userRef = db.collection('users').doc(user.uid);
+  unsubDoc = userRef.onSnapshot(snap => {
+    if (!snap.exists) {
+      const guest = loadLocal(GUEST_KEY), cached = loadLocal(localKey());
+      const start = cached.name ? cached : guest.name ? guest : fresh();
+      userRef.set({ email: user.email || '', displayName: user.displayName || '', premium: false,
+        createdAt: FV.serverTimestamp(), updatedAt: FV.serverTimestamp(), progress: JSON.parse(JSON.stringify(start)) })
+        .catch(dbError);
+      return;
+    }
+    const data = snap.data() || {}, was = PREMIUM;
+    PREMIUM = data.premium === true;
+    if (firstSnap) {
+      firstSnap = false;
+      D = normalize(data.progress);
+      try { localStorage.setItem(localKey(), JSON.stringify(D)); } catch (e) {}
+      chosenAv = D.avatar; renderAvatars();
+      show(D.name ? 'home' : 'setup');
+      return;
+    }
+    if (PREMIUM && !was) { toast('🎉 Premium aktif! Semua materi sudah terbuka.'); confetti(); rerender(); }
+    else if (!PREMIUM && was) { toast('Status Premium akun ini sudah dicabut.'); rerender(); }
+  }, dbError);
+}
+function dbError(e) {
+  console.warn(e);
+  const denied = e && (e.code === 'permission-denied' || e.code === 'firestore/permission-denied');
+  gateNote(denied ? 'Database menolak akses. Pastikan aturan keamanan (Rules) Firestore sudah dipasang sesuai petunjuk.' : 'Gagal memuat data akun. Periksa koneksi internet lalu coba lagi.');
+  if (auth) auth.signOut();
+  MODE = 'none'; show('gate');
+}
+
+function setAuthMode(m) {
+  authMode = m;
+  document.querySelectorAll('[data-amode]').forEach(x => { const on = x.dataset.amode === m; x.classList.toggle('on', on); x.setAttribute('aria-selected', String(on)); });
+  $('#authSubmit').textContent = m === 'login' ? 'Masuk' : 'Daftar & mulai belajar';
+  $('#aPass').setAttribute('autocomplete', m === 'login' ? 'current-password' : 'new-password');
+  $('#forgotBtn').hidden = m !== 'login';
+  setAuthErr('');
+}
+document.querySelectorAll('[data-amode]').forEach(b => b.onclick = () => setAuthMode(b.dataset.amode));
+$('#authForm').addEventListener('submit', async e => {
   e.preventDefault();
-  const c = $('#code').value.trim().toUpperCase();
-  if (!c) { $('#codeErr').textContent = 'Masukkan kode akses dulu, ya.'; return; }
-  if (!CONFIG.CODES.includes(c)) { $('#codeErr').textContent = 'Kode tidak cocok. Periksa lagi kode aksesmu.'; return; }
-  D.access = 'full'; save(); toast('Akses lengkap terbuka! 🎉');
-  show(D.name ? 'home' : 'setup');
+  if (!auth) return;
+  const email = $('#aEmail').value.trim(), pass = $('#aPass').value;
+  if (!email) return setAuthErr('Isi email dulu, ya.');
+  if (pass.length < 6) return setAuthErr('Kata sandi minimal 6 karakter.');
+  const btn = $('#authSubmit'), label = btn.textContent;
+  btn.disabled = true; btn.textContent = 'Tunggu sebentar…'; setAuthErr('');
+  try {
+    if (authMode === 'login') await auth.signInWithEmailAndPassword(email, pass);
+    else await auth.createUserWithEmailAndPassword(email, pass);
+    $('#aPass').value = '';
+  } catch (err) { setAuthErr(authMsg(err)); }
+  btn.disabled = false; btn.textContent = label;
 });
-$('#tryFree').onclick = () => { D.access = 'free'; save(); show(D.name ? 'home' : 'setup'); };
-$('#enterCode').onclick = () => { $('#code').value = ''; $('#codeErr').textContent = ''; show('gate'); };
+$('#forgotBtn').onclick = async () => {
+  if (!auth) return;
+  const email = $('#aEmail').value.trim();
+  if (!email) return setAuthErr('Tulis email akunmu di kolom Email, lalu ketuk "Lupa kata sandi?" lagi.');
+  try { await auth.sendPasswordResetEmail(email); setAuthOk('Link untuk membuat kata sandi baru sudah dikirim ke ' + email + '. Cek juga folder Spam.'); }
+  catch (err) { setAuthErr(authMsg(err)); }
+};
+$('#googleBtn').onclick = async () => {
+  if (!auth) return;
+  setAuthErr('');
+  const provider = new firebase.auth.GoogleAuthProvider();
+  try { await auth.signInWithPopup(provider); }
+  catch (err) {
+    if (['auth/popup-blocked', 'auth/operation-not-supported-in-this-environment', 'auth/cancelled-popup-request'].includes(err.code)) {
+      try { await auth.signInWithRedirect(provider); } catch (e2) { setAuthErr(authMsg(e2)); }
+    } else if (err.code !== 'auth/popup-closed-by-user') setAuthErr(authMsg(err));
+  }
+};
+$('#tryFree').onclick = () => { MODE = 'guest'; PREMIUM = false; D = loadLocal(GUEST_KEY); chosenAv = D.avatar; renderAvatars(); show(D.name ? 'home' : 'setup'); };
+async function logout() {
+  await flushCloud();
+  if (MODE === 'user' && auth) { MODE = 'none'; await auth.signOut(); }
+  MODE = 'none'; D = fresh(); show('gate');
+}
+function toLogin() { MODE = 'none'; D = fresh(); show('gate'); }
+async function copyText(text) {
+  try { await navigator.clipboard.writeText(text); toast('Email akun disalin'); }
+  catch (e) { toast('Email akunmu: ' + text); }
+}
+
+/* Kotak ajakan Premium (beranda & hasil latihan) */
+function renderUpsell(el) {
+  if (full()) { el.hidden = true; return; }
+  el.hidden = false;
+  if (MODE === 'guest') {
+    el.innerHTML = `<b>🔓 Buka semua 24 topik</b><p class="small">Kamu sedang mencoba tanpa akun, jadi yang terbuka hanya Perkalian. Daftar atau masuk dulu supaya progres tersimpan dan akunmu bisa dijadikan Premium.</p><button class="btn btn-main full" data-act="login">Daftar / Masuk</button>`;
+  } else {
+    el.innerHTML = `<b>🔓 Buka semua 24 topik dengan Premium</b><p class="small">Akunmu masih versi gratis, jadi yang terbuka hanya Perkalian. Untuk mengaktifkan Premium, kirim email akunmu ke admin Juara Kelas: <b>${esc(USER.email || '')}</b>. Setelah diaktifkan, semua materi langsung terbuka tanpa perlu masuk ulang.</p><button class="btn btn-ghost full" data-act="copy">Salin email akun</button>`;
+  }
+}
+document.addEventListener('click', e => {
+  const b = e.target.closest('[data-act]'); if (!b) return;
+  if (b.dataset.act === 'login') toLogin();
+  if (b.dataset.act === 'copy' && USER) copyText(USER.email || '');
+  if (b.dataset.act === 'logout') logout();
+});
+
+/* ================== ADMIN ================== */
+let ADMIN_ROWS = [], pendingToggle = null;
+const toDate = v => v ? (v.toDate ? v.toDate() : new Date(v)) : null;
+const fmtDate = d => d ? d.toLocaleDateString('id-ID', { day:'numeric', month:'short', year:'numeric' }) : '–';
+function ago(d) {
+  if (!d) return '–';
+  const m = Math.floor((Date.now() - d.getTime()) / 60000);
+  if (m < 1) return 'baru saja'; if (m < 60) return m + ' menit lalu';
+  const h = Math.floor(m / 60); if (h < 24) return h + ' jam lalu';
+  return Math.floor(h / 24) + ' hari lalu';
+}
+async function loadAdmin() {
+  if (!isAdmin()) { show('home'); return; }
+  $('#adminList').innerHTML = '<p class="muted" style="padding:12px 0">Memuat daftar akun…</p>';
+  try {
+    const qs = await db.collection('users').orderBy('createdAt', 'desc').limit(1000).get();
+    ADMIN_ROWS = qs.docs.map(d => Object.assign({ id: d.id }, d.data()));
+    renderAdmin();
+  } catch (e) {
+    $('#adminList').innerHTML = `<p class="err" style="padding:12px 0">Gagal memuat daftar akun (${esc(e.code || e.message || 'error')}). Pastikan aturan keamanan Firestore sudah dipasang.</p>`;
+  }
+}
+function renderAdmin() {
+  const q = $('#adminSearch').value.trim().toLowerCase();
+  const prem = ADMIN_ROWS.filter(r => r.premium === true).length;
+  $('#adminTotals').innerHTML = `<div><b>${ADMIN_ROWS.length}</b><small>Total akun</small></div><div><b>${prem}</b><small>Premium</small></div><div><b>${ADMIN_ROWS.length - prem}</b><small>Gratis</small></div>`;
+  const rows = ADMIN_ROWS.filter(r => !q || (r.email || '').toLowerCase().includes(q) || ((r.progress && r.progress.name) || '').toLowerCase().includes(q));
+  $('#adminList').innerHTML = rows.length ? rows.map(r => {
+    const p = r.premium === true, kid = r.progress && r.progress.name ? esc(r.progress.name) : 'belum diisi';
+    const confirm = pendingToggle === r.id;
+    return `<div class="urow"><div class="urow-top"><b>${esc(r.email || '(tanpa email)')}</b><span class="pill ${p ? 'prem' : 'free'}">${p ? 'Premium' : 'Gratis'}</span></div>
+      <small>Anak: ${kid} · Daftar ${fmtDate(toDate(r.createdAt))} · Aktif ${ago(toDate(r.updatedAt))}</small>
+      <button class="btn btn-sm full ${confirm ? 'confirm' : p ? 'btn-danger' : 'btn-main'}" data-toggle="${r.id}">${confirm ? (p ? 'Ketuk lagi untuk mencabut Premium' : 'Ketuk lagi untuk mengaktifkan Premium') : (p ? 'Cabut Premium' : '⭐ Jadikan Premium')}</button></div>`;
+  }).join('') : `<p class="muted" style="padding:12px 0">${ADMIN_ROWS.length ? 'Tidak ada akun yang cocok dengan pencarian.' : 'Belum ada akun yang terdaftar.'}</p>`;
+}
+$('#adminSearch').addEventListener('input', () => { pendingToggle = null; renderAdmin(); });
+$('#adminRefresh').onclick = () => { pendingToggle = null; loadAdmin(); };
+$('#openAdmin').onclick = () => show('admin');
+$('#adminList').addEventListener('click', async e => {
+  const b = e.target.closest('[data-toggle]'); if (!b) return;
+  const id = b.dataset.toggle, row = ADMIN_ROWS.find(r => r.id === id); if (!row) return;
+  if (pendingToggle !== id) { pendingToggle = id; renderAdmin(); setTimeout(() => { if (pendingToggle === id) { pendingToggle = null; renderAdmin(); } }, 5000); return; }
+  pendingToggle = null; b.disabled = true; b.textContent = 'Menyimpan…';
+  const next = row.premium !== true;
+  try {
+    await db.collection('users').doc(id).update({ premium: next, premiumUpdatedAt: FV.serverTimestamp() });
+    row.premium = next; toast(next ? `Premium aktif untuk ${row.email}` : `Premium dicabut dari ${row.email}`);
+  } catch (err) { toast('Gagal menyimpan: ' + (err.code || err.message)); }
+  renderAdmin();
+});
 
 /* ---------- profil ---------- */
-let chosenAv = D.avatar;
+let chosenAv = '🦁';
 function renderAvatars() {
   $('#avatarPick').innerHTML = AVATARS.map(a => `<button class="av ${a === chosenAv ? 'on' : ''}" data-av="${a}" aria-label="Karakter ${a}">${a}</button>`).join('');
 }
@@ -984,7 +1250,8 @@ function renderHome() {
       ${acc && !locked ? `<span class="acc">${acc}</span>` : ''}<span class="em" aria-hidden="true">${s.em}</span>
       <h3>${s.name}</h3><small>${TOPICS[k].length} topik · ${done}/${withLesson.length} materi selesai</small></button>`;
   }).join('');
-  $('#upsell').hidden = full();
+  renderUpsell($('#upsell'));
+  $('#openAdmin').hidden = !isAdmin();
   $('#badges').innerHTML = BADGES.map(b => `<div class="bdg ${D.badges.includes(b.id) ? 'on' : 'off'}"><span>${b.em}</span>${b.name}</div>`).join('');
 }
 $('#subjects').addEventListener('click', e => {
@@ -1140,7 +1407,7 @@ function finishQuiz() {
   $('#rReward').innerHTML = `<span>+${Q.xp} XP</span><span>+${stars} ⭐</span>`;
   const newB = D.badges.filter(b => !before.includes(b)).map(id => BADGES.find(x => x.id === id));
   $('#rBadges').innerHTML = newB.map(b => `<div class="newbadge">Lencana baru: ${b.em} ${b.name}</div>`).join('');
-  $('#rUpsell').hidden = full();
+  renderUpsell($('#rUpsell'));
   $('#rLesson').hidden = !t.lesson;
   show('result');
   if (stars >= 2 || newB.length) confetti();
@@ -1164,6 +1431,12 @@ function renderReport() {
   $('#repTip').textContent = tq < 10 ? 'Laporan akan lebih akurat setelah anak mengerjakan lebih banyak soal.'
     : weakest && weakAcc < 80 ? `Saran: ajak anak membaca ulang materi ${weakest} lalu berlatih lagi (${weakAcc}% benar).`
     : 'Hasil belajar sudah bagus di semua pelajaran. Pertahankan latihan rutin setiap hari!';
+  const ac = $('#accountCard');
+  if (MODE === 'user') {
+    ac.innerHTML = `<h3 style="font-size:1.15rem">Akun</h3><div class="acct-row"><b>${esc(USER.email || '')}</b><span class="pill ${full() ? 'prem' : 'free'}">${isAdmin() ? 'Admin' : PREMIUM ? 'Premium' : 'Gratis'}</span></div><p class="muted small">Progres belajar tersimpan otomatis di akun ini, jadi tetap aman walau ganti HP.</p><button class="btn btn-ghost full" data-act="logout">Keluar dari akun</button>`;
+  } else {
+    ac.innerHTML = `<h3 style="font-size:1.15rem">Akun</h3><p class="muted small">Kamu sedang mencoba tanpa akun. Progres hanya tersimpan di HP ini.</p><button class="btn btn-main full" data-act="login">Daftar / Masuk</button>`;
+  }
   $('#toggleSound').textContent = D.sound ? '🔊 Suara: nyala' : '🔇 Suara: mati';
   $('#resetBox').innerHTML = '<button class="btn btn-ghost full" id="resetAsk" style="color:var(--bad)">Hapus semua progres</button>';
 }
@@ -1174,7 +1447,7 @@ $('#resetBox').addEventListener('click', e => {
     $('#resetBox').innerHTML = '<p style="font-weight:800">Yakin? Semua bintang, XP, lencana, dan catatan materi akan hilang.</p><div class="row-btn"><button class="btn btn-ghost" id="resetNo">Batal</button><button class="btn btn-main" id="resetYes" style="background:var(--bad);box-shadow:0 4px 0 #a02a2e">Ya, hapus</button></div>';
   } else if (e.target.id === 'resetNo') renderReport();
   else if (e.target.id === 'resetYes') {
-    const keep = { access:D.access, name:D.name, avatar:D.avatar, sound:D.sound };
+    const keep = { name:D.name, avatar:D.avatar, sound:D.sound };
     D = Object.assign(fresh(), keep); save(); toast('Progres sudah dihapus'); renderReport();
   }
 });
@@ -1211,7 +1484,10 @@ function confetti() {
 
 /* ---------- mulai ---------- */
 renderAvatars();
-show(!D.access ? 'gate' : D.name ? 'home' : 'setup');
+if (IN_APP) gateNote('Kalau tombol Google tidak bisa dipakai, buka website ini di Chrome atau masuk pakai email.');
+show('loading');
+initFirebase();
 </script>
+
 </body>
 </html>
